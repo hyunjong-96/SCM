@@ -1,0 +1,14 @@
+dependencies {
+    implementation project(":scm_domain")
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+}
+
+jar {
+    enabled = false
+}
+
+//bootJar {
+//    mainClass('com.scm.ScmApplication')
+//}

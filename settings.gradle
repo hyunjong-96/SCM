@@ -1,0 +1,4 @@
+rootProject.name = 'scm'
+include 'scm_domain'
+include 'scm_api'
+
