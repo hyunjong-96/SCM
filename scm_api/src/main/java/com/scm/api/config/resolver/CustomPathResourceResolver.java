@@ -1,4 +1,4 @@
-package com.scm.api.controller;
+package com.scm.api.config.resolver;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;

@@ -1,6 +1,6 @@
 package com.scm.api.config;
 
-import com.scm.api.controller.CustomPathResourceResolver;
+import com.scm.api.config.resolver.CustomPathResourceResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
