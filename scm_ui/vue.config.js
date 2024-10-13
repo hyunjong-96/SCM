@@ -8,7 +8,7 @@ module.exports = defineConfig({
 		}
   },
 
-  outputDir: '../scm_api/src/main/resource/static',
+  outputDir: '../scm_api/src/main/resources/static',
   devServer: {
     proxy: 'http://localhost:8080/api'
   }
