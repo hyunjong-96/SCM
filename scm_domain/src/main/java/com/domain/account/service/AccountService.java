@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class AccountService {
+public class AccountService{
 
     private final AccountRepository accountRepository;
 
@@ -20,5 +20,9 @@ public class AccountService {
                 .build();
 
         accountRepository.save(newAccount);
+    }
+
+    public Account findByEmail(String email) {
+        return accountRepository.findByEmail(email);
     }
 }

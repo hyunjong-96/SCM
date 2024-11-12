@@ -18,6 +18,6 @@ public class AuthService {
                 .password(input.getPassword())
                 .build();
 
-        accountService.save(accountInput);
+//        accountService.save(accountInput);
     }
 }

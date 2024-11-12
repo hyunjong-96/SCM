@@ -1,12 +1,10 @@
 package com.domain.account.models;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "account")
 public class Account {
@@ -33,5 +31,9 @@ public class Account {
         this.email = email;
         this.password = password;
         this.name = name;
+    }
+
+    public String getAccountPassword() {
+        return this.password;
     }
 }
