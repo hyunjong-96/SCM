@@ -2,6 +2,7 @@ package com.scm.api.account;
 
 import com.scm.api.account.dto.SignInInput;
 import com.scm.api.account.service.AccountFacadeService;
+import com.scm.api.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -32,7 +33,7 @@ public class AccountController {
     private final AccountFacadeService accountFacadeService;
 
     @PostMapping("/save")
-    public ResponseEntity<Void> signIn(@RequestBody SignInInput input) throws BadRequestException {
+    public ResponseEntity<Void> signIn(@RequestBody SignInInput input) throws GlobalException {
         accountFacadeService.signIn(input);
 
         return new ResponseEntity<>(HttpStatus.OK);

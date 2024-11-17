@@ -26,7 +26,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity()
 public class SecurityConfig {
 
     private final String[] LOGIN_PATH = new String[]{"/api/auth/login", "/api/auth"};

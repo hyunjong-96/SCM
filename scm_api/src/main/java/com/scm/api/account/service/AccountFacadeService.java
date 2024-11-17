@@ -3,6 +3,7 @@ package com.scm.api.account.service;
 import com.domain.account.dto.SaveAccountInput;
 import com.domain.account.service.AccountService;
 import com.scm.api.account.dto.SignInInput;
+import com.scm.api.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -28,11 +29,10 @@ public class AccountFacadeService {
     private final AccountService accountService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public void signIn(SignInInput input) throws BadRequestException {
+    public void signIn(SignInInput input) throws GlobalException {
 
         if(accountService.isExistAccount(input.getEmail())) {
-            String message = input.getEmail() + "is exist";
-            throw new BadRequestException(message);
+            throw new GlobalException(input.getEmail() + "is exist");
         }
 
         SaveAccountInput accountInput = SaveAccountInput.builder()
