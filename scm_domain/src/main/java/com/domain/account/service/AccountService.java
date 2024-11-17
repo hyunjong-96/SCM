@@ -22,6 +22,10 @@ public class AccountService{
         accountRepository.save(newAccount);
     }
 
+    public boolean isExistAccount(String email) {
+        return accountRepository.findByEmail(email) != null;
+    }
+
     public Account findByEmail(String email) {
         return accountRepository.findByEmail(email);
     }

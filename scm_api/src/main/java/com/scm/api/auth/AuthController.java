@@ -1,6 +1,6 @@
 package com.scm.api.auth;
 
-import com.scm.api.auth.service.AuthService;
+import com.scm.api.auth.service.AuthFacadeService;
 import com.scm.api.dto.LoginInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,11 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthFacadeService authFacadeService;
 
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody LoginInput input) {
-        authService.login(input);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
