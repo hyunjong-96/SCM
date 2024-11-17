@@ -1,7 +1,7 @@
 package com.scm.api.auth;
 
 import com.scm.api.auth.service.AuthFacadeService;
-import com.scm.api.dto.LoginInput;
+import com.scm.api.auth.dto.LoginInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
