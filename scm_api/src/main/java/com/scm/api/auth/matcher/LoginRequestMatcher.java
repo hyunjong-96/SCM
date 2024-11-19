@@ -10,10 +10,11 @@ import java.util.List;
 public class LoginRequestMatcher implements RequestMatcher {
 
     private final String DEFAULT_LOGIN_HTTP_METHOD = "POST";
+    private final String[] LOGIN_PATH = new String[]{"/api/auth/login"};
     private List<AntPathRequestMatcher> matcherList = new ArrayList<>();
 
-    public LoginRequestMatcher(String ...patterns) {
-        for(String pattern : patterns) {
+    public LoginRequestMatcher() {
+        for(String pattern : LOGIN_PATH) {
             matcherList.add(new AntPathRequestMatcher(pattern, DEFAULT_LOGIN_HTTP_METHOD));
         }
     }

@@ -29,8 +29,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @EnableWebSecurity()
 public class SecurityConfig {
 
-    private final String[] LOGIN_PATH = new String[]{"/api/auth/login", "/api/auth"};
-
     private final AccountDetailService accountDetailService;
 
     @Bean
@@ -47,7 +45,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthCustomFilter buildAuthCustomFilter() {
-        RequestMatcher matcher = new LoginRequestMatcher(LOGIN_PATH);
+        RequestMatcher matcher = new LoginRequestMatcher();
 
         AuthCustomFilter customFilter = new AuthCustomFilter(matcher);
         customFilter.setAuthenticationManager(buildAuthenticationProviderManager());
@@ -79,8 +77,4 @@ public class SecurityConfig {
         return new LoginFailureHandler();
     }
 
-//    @Bean
-//    public AuthenticationProvider buildAuthCustomProvider() {
-//        return new AuthCustomProvider();
-//    }
 }
