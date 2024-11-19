@@ -12,4 +12,12 @@ module.exports = defineConfig({
   devServer: {
     proxy: 'http://localhost:8080/api'
   }
+  // devServer: {
+  //   proxy: {
+  //     '/api': {
+  //       target:'http://localhost:8080',
+  //       changeOrigin:true
+  //     }
+  //   }
+  // }
 })
