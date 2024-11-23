@@ -1,6 +1,5 @@
 package com.scm.api.auth.handler;
 
-import com.domain.account.models.Account;
 import com.scm.api.auth.model.AccountDetails;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +17,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         AccountDetails userDetails = (AccountDetails) authentication.getPrincipal();
         log.info( "로그인 성공. JWT 발급. username: {}" ,userDetails.getUsername());
 
+        //todo : 로그인 성공 후 JWT 발급 후 성공 화면으로 redirect할 부분.
 
         response.getWriter().write("success");
     }

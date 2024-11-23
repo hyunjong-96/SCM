@@ -16,5 +16,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); //401 인증 실패
         response.getWriter().write("fail");
         log.info("로그인 실패");
+
+        //todo : 로그인 실패시 실패 로직 후 로그인 실패 화면 redirect
     }
 }
