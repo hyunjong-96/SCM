@@ -1,6 +1,7 @@
 package com.scm.api.config;
 
 import com.scm.api.auth.filter.AuthCustomFilter;
+import com.scm.api.auth.filter.JwtAuthorizationFilter;
 import com.scm.api.auth.handler.LoginFailureHandler;
 import com.scm.api.auth.handler.LoginSuccessHandler;
 import com.scm.api.auth.matcher.LoginRequestMatcher;
@@ -30,6 +31,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 public class SecurityConfig {
 
     private final AccountDetailService accountDetailService;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -38,10 +40,12 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(buildAuthCustomFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
+
 
     @Bean
     public AuthCustomFilter buildAuthCustomFilter() {
