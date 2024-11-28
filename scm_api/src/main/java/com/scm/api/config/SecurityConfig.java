@@ -72,6 +72,7 @@ public class SecurityConfig {
         return new JwtAuthorizationFilter(buildJwtAuthorizationProvider());
     }
 
+    @Bean
     public JwtAuthorizationProvider buildJwtAuthorizationProvider() {
         return new JwtAuthorizationProvider(accountDetailService);
     }
@@ -82,7 +83,7 @@ public class SecurityConfig {
     }
 
     public AuthenticationSuccessHandler buildSuccessHandler() {
-        return new LoginSuccessHandler();
+        return new LoginSuccessHandler(buildJwtAuthorizationProvider());
     }
 
     public AuthenticationFailureHandler buildFailureHandler() {
