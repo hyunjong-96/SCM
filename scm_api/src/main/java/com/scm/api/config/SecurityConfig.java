@@ -6,6 +6,7 @@ import com.scm.api.auth.handler.LoginFailureHandler;
 import com.scm.api.auth.handler.LoginSuccessHandler;
 import com.scm.api.auth.matcher.LoginRequestMatcher;
 import com.scm.api.auth.provider.AuthCustomProvider;
+import com.scm.api.auth.provider.JwtAuthorizationProvider;
 import com.scm.api.auth.service.AccountDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +32,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 public class SecurityConfig {
 
     private final AccountDetailService accountDetailService;
-    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(buildAuthCustomFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(buildJwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
@@ -66,6 +66,14 @@ public class SecurityConfig {
 
     public AuthenticationProvider buildAuthCustomProvider() {
         return new AuthCustomProvider(accountDetailService, bCryptPasswordEncoder());
+    }
+
+    public JwtAuthorizationFilter buildJwtAuthorizationFilter() {
+        return new JwtAuthorizationFilter(buildJwtAuthorizationProvider());
+    }
+
+    public JwtAuthorizationProvider buildJwtAuthorizationProvider() {
+        return new JwtAuthorizationProvider(accountDetailService);
     }
 
     @Bean

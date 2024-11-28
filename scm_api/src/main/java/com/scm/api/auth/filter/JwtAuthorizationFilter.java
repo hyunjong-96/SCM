@@ -12,10 +12,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.*;
 
 /**
  * packageName    : com.scm.api.auth.filter
@@ -28,10 +31,27 @@ import java.io.IOException;
  * -----------------------------------------------------------
  * 2024/11/23        leehyunjong       최초 생성
  */
-@RequiredArgsConstructor
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
+
+    private final PathMatcher pathMatcher = new AntPathMatcher();
+    private final Set<String> SkipPattern = new HashSet<>(List.of("/api/auth/**", "/api/account/save"));
     private final JwtAuthorizationProvider jwtAUthorizationProvider;
+
+    public JwtAuthorizationFilter(JwtAuthorizationProvider jwtAUthorizationProvider) {
+        this.jwtAUthorizationProvider = jwtAUthorizationProvider;
+    }
+
+    /**
+     * Jwt Filter를 타지 않는 예외 요청 URL 처리
+     * @param request current HTTP request
+     * @return URL pattern을 만족하는 경우 true -> true이면 Jwt Filter를 타지 않는다.
+     */
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String requestUrl = request.getRequestURI();
+        return SkipPattern.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestUrl));
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
