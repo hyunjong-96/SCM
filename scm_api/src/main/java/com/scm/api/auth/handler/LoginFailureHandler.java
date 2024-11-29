@@ -18,5 +18,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         log.info("로그인 실패");
 
         //todo : 로그인 실패시 실패 로직 후 로그인 실패 화면 redirect
+        response.sendRedirect("localhost:8080/login");
     }
 }

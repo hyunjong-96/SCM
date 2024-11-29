@@ -26,6 +26,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         String accessToken = jwtAuthorizationProvider.generateToken(userDetails.getUsername());
 
         response.setHeader("accessToken", accessToken);
+        response.sendRedirect("localhost:8080/dashboard");
         response.getWriter().write("success");
     }
 }
