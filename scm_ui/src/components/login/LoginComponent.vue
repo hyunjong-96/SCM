@@ -69,7 +69,7 @@
   </template>
 
   <script>
-import api from '../modules/api.js'
+import api from '../../modules/api.js'
 
     export default {
         name: 'LoginComponent',
