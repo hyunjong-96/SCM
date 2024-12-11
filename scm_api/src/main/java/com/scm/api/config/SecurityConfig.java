@@ -36,6 +36,7 @@ public class SecurityConfig {
 
     private final AccountDetailService accountDetailService;
     private final CorsConfigurationSource corsConfigurationSource;
+    private final LoginSuccessHandler loginSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -49,13 +50,29 @@ public class SecurityConfig {
         return http.build();
     }
 
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.csrf(AbstractHttpConfigurer::disable)
+//                .cors(AbstractHttpConfigurer::disable)
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+//                .httpBasic(AbstractHttpConfigurer::disable)
+//                .formLogin(AbstractHttpConfigurer::disable)
+//                .sessionManagement(c ->
+//                        c.sessionCreationPolicy(SessionCreationPolicy.NEVER))
+//                        .addFilterBefore(buildAuthCustomFilter(), UsernamePasswordAuthenticationFilter.class);
+////                .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+////                .addFilterBefore(exceptionHandlerFilter, authenticationTokenFilter.getClass());
+//
+//        return http.build();
+//    }
+
     @Bean
     public AuthCustomFilter buildAuthCustomFilter() {
         RequestMatcher matcher = new LoginRequestMatcher();
 
         AuthCustomFilter customFilter = new AuthCustomFilter(matcher);
         customFilter.setAuthenticationManager(buildAuthenticationProviderManager());
-        customFilter.setAuthenticationSuccessHandler(buildSuccessHandler());
+        customFilter.setAuthenticationSuccessHandler(loginSuccessHandler);
         customFilter.setAuthenticationFailureHandler(buildFailureHandler());
 
         return customFilter;
@@ -76,7 +93,7 @@ public class SecurityConfig {
     }
 
     public AuthenticationSuccessHandler buildSuccessHandler() {
-        return new LoginSuccessHandler();
+        return loginSuccessHandler;
     }
 
     public AuthenticationFailureHandler buildFailureHandler() {

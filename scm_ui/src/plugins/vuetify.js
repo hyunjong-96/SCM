@@ -12,12 +12,5 @@ export default createVuetify(
 export const staticPrimaryColor = '#008485'
 
 export const thems = {
-  light: {
-    dark: false,
-    colors: {
-      'primary': staticPrimaryColor,
-      'error': '#FF4C51',
-      'warning': '#FF9F43',
-    }
-  }
+  
 }

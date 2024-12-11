@@ -1,5 +1,6 @@
 import axios from 'axios';
-// import { handleError } from 'vue';
+import { useAlertStore } from '@/stores/alert';
+import { useAuthStore } from '@/stores/auth';
 
 const API_URL = process.env.VUE_APP_API_BASE_URL;
 
@@ -41,5 +42,33 @@ const api = {
     get,
     post
 }
+
+instance.interceptors.response.use(
+    response => {
+        return response
+    },
+    error => {
+        // if(error.response == undefined && error.code == "ERR_NETWORK") {
+
+        // }
+
+        const alertStore = useAlertStore();
+        const authStore = useAuthStore();
+
+        console.log('error status : ',error.response)
+
+        if(error.response.status == '401') {
+            console.log('401 test!!!')
+
+            authStore.logout();
+        }
+        else {
+            let title = "다른 에러";
+            let message = "다른 에러 메세지";
+
+            alertStore.showAlert(title, message);
+        }
+    }
+)
 
 export default api;

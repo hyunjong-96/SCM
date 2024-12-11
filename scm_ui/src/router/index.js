@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '../views/MainView.vue'
 import MainpageView from '../views/MainpageView.vue'
 import LoginView from '../views/LoginView.vue'
+import RedirectComponent from '../components/auth/RedirectComponent.vue'
 
 const routes = [
   {
@@ -26,6 +27,10 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView
+  },
+  {
+    path: '/auth/login',
+    component: RedirectComponent
   }
 ]
 

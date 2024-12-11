@@ -8,7 +8,12 @@ const password = ref("")
 
 const login = async () => {
 
-  const result = await api.post('/auth/login', { id: account.value, password: password.value });
+  const data = {
+    "email" : account.value,
+    "password" : password.value
+  }
+
+  const result = await api.post('/auth/login', data);
   console.log('call api result : ', result);
 }
 </script>
