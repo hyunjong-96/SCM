@@ -1,7 +1,11 @@
 <script setup>
 import api from '../modules/api.js'
 import { ref } from 'vue';
+import { useRouter } from 'vue-router'
+import { useCookies } from 'vue3-cookies';
 
+const router = useRouter()
+const { cookies } = useCookies();
 // const visible = ref(false)
 const account = ref("")
 const password = ref("")
@@ -14,7 +18,28 @@ const login = async () => {
   }
 
   const result = await api.post('/auth/login', data);
-  console.log('call api result : ', result);
+
+  if(result) {
+    let redirectUrl = result.data.redirectUrl;
+
+    const url = new URL(redirectUrl);
+
+    const urlParams = url.searchParams;
+
+    const token = urlParams.get("scm-token");
+
+    // if(!token) {
+    //   console.log("token 없음!!!");
+    //   return;
+    // }
+
+    cookies.set("scm-token", token);
+
+    router.push("/dashboard")
+  }
+  else {
+    router.push("/login")
+  }
 }
 </script>
 

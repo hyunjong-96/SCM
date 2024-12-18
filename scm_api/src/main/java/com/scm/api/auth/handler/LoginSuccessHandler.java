@@ -1,5 +1,6 @@
 package com.scm.api.auth.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scm.api.auth.model.AccountDetails;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -32,8 +35,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                                 .build()
                 .toString();
 
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("redirectUrl", redirectUrl);
+
         response.setContentType("application/json;charset=UTF-8");
-        response.sendRedirect(redirectUrl);
-//        response.getWriter().write("success");
+//        response.sendRedirect(redirectUrl);
+        response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
     }
 }

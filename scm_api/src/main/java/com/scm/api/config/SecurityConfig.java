@@ -35,14 +35,14 @@ import java.util.List;
 public class SecurityConfig {
 
     private final AccountDetailService accountDetailService;
-    private final CorsConfigurationSource corsConfigurationSource;
+    private final CorsConfigurationSource customCorsConfigurationSource;
     private final LoginSuccessHandler loginSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .cors(cors -> cors.configurationSource(customCorsConfigurationSource))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(buildAuthCustomFilter(), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -1,8 +1,11 @@
 import axios from 'axios';
 import { useAlertStore } from '@/stores/alert';
 import { useAuthStore } from '@/stores/auth';
+import { useCookies } from 'vue3-cookies';
 
 const API_URL = process.env.VUE_APP_API_BASE_URL;
+
+const {cookies} = useCookies();
 
 const instance = axios.create(
     {
@@ -13,8 +16,15 @@ const instance = axios.create(
 })
 
 const get = async(url, params = {}) => {
+    const data = {
+        ...params, 
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': 'Bearer ' + cookies.get('scm-token')
+        } 
+      }
     try{
-        const response = await instance.get(url, {params});
+        const response = await instance.get(url, data);
         return response;
     }
     catch(error) {
@@ -22,11 +32,21 @@ const get = async(url, params = {}) => {
     }
 }
 
-const post = async(url, data = {}) => {
+const post = async(url, body, params = {}) => {
+    var data = {
+        ...params, 
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': 'Bearer ' + cookies.get('scm-token')
+        } 
+      }
+
+      console.log('post authorization : ',data.headers)
+
     console.log('url : ',API_URL)
     console.log('direct url : ',process.env)
     try{
-        const response = await instance.post(url, data);
+        const response = await instance.post(url, body, data);
         return response;
     }catch(error) {
         handleError(error);
@@ -57,7 +77,7 @@ instance.interceptors.response.use(
 
         console.log('error status : ',error.response)
 
-        if(error.response.status == '401') {
+        if(error.response && error.response.status == '401') {
             console.log('401 test!!!')
 
             authStore.logout();
