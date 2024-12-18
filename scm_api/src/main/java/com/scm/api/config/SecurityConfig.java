@@ -37,6 +37,7 @@ public class SecurityConfig {
     private final AccountDetailService accountDetailService;
     private final CorsConfigurationSource customCorsConfigurationSource;
     private final LoginSuccessHandler loginSuccessHandler;
+    private final LoginFailureHandler loginFailureHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -78,7 +79,6 @@ public class SecurityConfig {
         return customFilter;
     }
 
-    @Bean
     public AuthenticationManager buildAuthenticationProviderManager() {
         return new ProviderManager(buildAuthCustomProvider());
     }
@@ -97,7 +97,7 @@ public class SecurityConfig {
     }
 
     public AuthenticationFailureHandler buildFailureHandler() {
-        return new LoginFailureHandler();
+        return loginFailureHandler;
     }
 
 
