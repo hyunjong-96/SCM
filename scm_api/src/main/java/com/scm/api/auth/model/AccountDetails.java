@@ -29,6 +29,6 @@ public class AccountDetails extends Account implements UserDetails {
 
     @Override
     public String getUsername() {
-        return String.valueOf(this.getId());
+        return String.valueOf(this.getEmail());
     }
 }

@@ -38,8 +38,6 @@ const login = async () => {
     router.push("/dashboard")
   }
   else {
-    alert("로그인 실패")
-
     router.push("/login")
   }
 }

@@ -1,10 +1,12 @@
 package com.scm.api.config;
 
 import com.scm.api.auth.filter.AuthCustomFilter;
+import com.scm.api.auth.filter.JwtAuthorizationFilter;
 import com.scm.api.auth.handler.LoginFailureHandler;
 import com.scm.api.auth.handler.LoginSuccessHandler;
 import com.scm.api.auth.matcher.LoginRequestMatcher;
 import com.scm.api.auth.provider.AuthCustomProvider;
+import com.scm.api.auth.provider.JwtAuthorizationProvider;
 import com.scm.api.auth.service.AccountDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -46,6 +48,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(customCorsConfigurationSource))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(buildAuthCustomFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(buildJwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
@@ -85,6 +88,15 @@ public class SecurityConfig {
 
     public AuthenticationProvider buildAuthCustomProvider() {
         return new AuthCustomProvider(accountDetailService, bCryptPasswordEncoder());
+    }
+
+    public JwtAuthorizationFilter buildJwtAuthorizationFilter() {
+        return new JwtAuthorizationFilter(buildJwtAuthorizationProvider());
+    }
+
+    @Bean
+    public JwtAuthorizationProvider buildJwtAuthorizationProvider() {
+        return new JwtAuthorizationProvider(accountDetailService);
     }
 
     @Bean

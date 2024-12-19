@@ -20,3 +20,6 @@
 login:
   success:
     url: http://localhost:8081/auth/redirect
+
+jwt:
+  secret: NOEqMDad2wpkgzw6W7iFZuRdrlQS8cbD
