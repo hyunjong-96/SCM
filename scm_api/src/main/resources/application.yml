@@ -17,3 +17,6 @@
 #        show_sql: true
 #        format_sql: true
 #  #        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+login:
+  success:
+    url: http://localhost:8081/auth/redirect

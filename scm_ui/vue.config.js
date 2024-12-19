@@ -10,6 +10,14 @@ module.exports = defineConfig({
 
   outputDir: '../scm_api/src/main/resources/static',
   devServer: {
-    proxy: 'http://localhost:8080/api'
+    // proxy: 'http://localhost:8080/api'
   }
+  // devServer: {
+  //   proxy: {
+  //     '/api': {
+  //       target:'http://localhost:8080',
+  //       changeOrigin:true
+  //     }
+  //   }
+  // }
 })
