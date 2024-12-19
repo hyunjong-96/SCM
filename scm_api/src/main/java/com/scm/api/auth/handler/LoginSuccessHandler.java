@@ -45,7 +45,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         responseBody.put("redirectUrl", redirectUrl);
 
         response.setContentType("application/json;charset=UTF-8");
-//        response.sendRedirect(redirectUrl);
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
     }
 }
