@@ -1,11 +1,9 @@
 package com.scm.api.auth.provider;
 
-import com.domain.account.models.Account;
 import com.scm.api.auth.exception.LoginAuthException;
 import com.scm.api.auth.model.AccountDetails;
 import com.scm.api.auth.model.PrincipalDetails;
 import com.scm.api.auth.service.AccountDetailService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -39,9 +37,9 @@ public class AuthCustomProvider implements AuthenticationProvider {
             throw new LoginAuthException(ex);
         }
 
-        Authentication principal = new PrincipalDetails((AccountDetails) principalDetail);
+//        Authentication principal = new PrincipalDetails((AccountDetails) principalDetail);
 
-        return principal;
+        return new PrincipalDetails((AccountDetails) principalDetail);
     }
 
     @Override

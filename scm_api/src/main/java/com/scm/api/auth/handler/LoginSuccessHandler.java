@@ -2,6 +2,7 @@ package com.scm.api.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scm.api.auth.model.AccountDetails;
+import com.scm.api.auth.model.PrincipalDetails;
 import com.scm.api.auth.provider.JwtAuthorizationProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,30 +22,26 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class LoginSuccessHandler implements AuthenticationSuccessHandler {
+public class LoginSuccessHandler {
 
     @Value("${login.success.url}")
-    private String redirectURL;
+    protected String redirectURL;
 
-    private final JwtAuthorizationProvider jwtAuthorizationProvider;
+    protected final JwtAuthorizationProvider jwtAuthorizationProvider;
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        AccountDetails userDetails = (AccountDetails) authentication.getPrincipal();
-        log.info( "로그인 성공. JWT 발급. username: {}" ,userDetails.getUsername());
+    public String getRedirectURL(HttpServletResponse response, Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+        log.info( "Success login. JWT 발급. username: {}" ,principalDetails.getUserName());
 
         //todo : 로그인 성공 후 JWT 발급 후 성공 화면으로 redirect할 부분.
-        String accessToken = jwtAuthorizationProvider.generateToken(userDetails.getUsername());
+        String accessToken = jwtAuthorizationProvider.generateToken(String.valueOf(principalDetails.getId()));
 
         String redirectUrl = UriComponentsBuilder.fromUriString(redirectURL)
-                        .queryParam("scm-token", accessToken)
-                                .build()
+                .queryParam("scm-token", accessToken)
+                .build()
                 .toString();
 
-        Map<String, String> responseBody = new HashMap<>();
-        responseBody.put("redirectUrl", redirectUrl);
-
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
+        return redirectUrl;
     }
 }

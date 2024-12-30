@@ -29,7 +29,7 @@ const routes = [
     component: LoginView
   },
   {
-    path: '/auth/login',
+    path: '/auth/redirect',
     component: RedirectComponent
   }
 ]

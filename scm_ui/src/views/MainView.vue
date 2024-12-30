@@ -12,12 +12,13 @@ const { cookies } = useCookies();
 const router = useRouter();
 
 //cookie 가져오기
-const cookie = cookies.get('scm-token')
+const token = cookies.get('scm-token')
 
-console.log('test : ',cookie)
+console.log('test : ',cookies)
+console.log('token : ',token)
 
 //
-if(cookie) {
+if(token) {
   router.push("/dashboard")
 }
 else {

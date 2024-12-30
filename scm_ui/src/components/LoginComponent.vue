@@ -1,14 +1,20 @@
 <script setup>
 import api from '../modules/api.js'
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router'
 import { useCookies } from 'vue3-cookies';
+
+const OAUTH2_URL = process.env.VITE_OAUTH_LOGIN_URL
 
 const router = useRouter()
 const { cookies } = useCookies();
 // const visible = ref(false)
 const account = ref("")
 const password = ref("")
+
+onMounted(() => {
+  console.log('oauth2Url : ',OAUTH2_URL)
+})
 
 const login = async () => {
 
@@ -53,6 +59,7 @@ const login = async () => {
         <input class="text-container" v-model="password" placeholder="Password"/>
         <span style="margin-top: 5px; margin-bottom: 5px;"></span>
         <button class="button-container" @click="login">login</button>
+        <VBtn href="http://localhost:8080/oauth2/authorization/github"> Github </VBtn>
       </div>
     </div>
   </div>

@@ -1,16 +1,39 @@
 package com.scm.api.auth.model;
 
-import com.domain.account.models.Account;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
+import java.util.Map;
 
-public class PrincipalDetails implements Authentication {
+public class PrincipalDetails implements Authentication, OAuth2User {
     private AccountDetails account;
+    private OAuth2Attribute attribute;
+
+    private Long id;
+    private String email;
+    private String name;
 
     public PrincipalDetails(AccountDetails account) {
         this.account = account;
+
+        this.id = account.getId();
+        this.email = account.getEmail();
+        this.name = account.getName();
+    }
+
+    public PrincipalDetails(OAuth2Attribute attributes) {
+        this.attribute = attributes;
+
+        this.id = attributes.getId();
+        this.email = attributes.getEmail();
+        this.name = attributes.getName();
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return this.attribute.getAttributes();
     }
 
     @Override
@@ -30,12 +53,12 @@ public class PrincipalDetails implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return this.account;
+        return this;
     }
 
     @Override
     public boolean isAuthenticated() {
-        return false;
+        return true;
     }
 
     @Override
@@ -45,6 +68,18 @@ public class PrincipalDetails implements Authentication {
 
     @Override
     public String getName() {
-        return String.valueOf(this.account.getId());
+        return String.valueOf(this.getId());
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public String getUserName() {
+        return this.name;
     }
 }
