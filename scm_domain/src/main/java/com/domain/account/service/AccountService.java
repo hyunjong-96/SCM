@@ -2,9 +2,11 @@ package com.domain.account.service;
 
 import com.domain.account.dto.SaveAccountInput;
 import com.domain.account.models.Account;
+import com.domain.account.models.LoginProvider;
 import com.domain.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 @RequiredArgsConstructor
 @Service
@@ -17,6 +19,7 @@ public class AccountService{
                 .email(input.getEmail())
                 .password(input.getPassword())
                 .name(input.getName())
+                .provider(input.getProvider())
                 .build();
 
         accountRepository.save(newAccount);

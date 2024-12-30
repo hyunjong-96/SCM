@@ -3,6 +3,7 @@ package com.scm.api.auth.model;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Collection;
 import java.util.Map;
@@ -27,7 +28,8 @@ public class PrincipalDetails implements Authentication, OAuth2User {
         this.attribute = attributes;
 
         this.id = attributes.getId();
-        this.email = attributes.getEmail();
+        this.email = ObjectUtils.isEmpty(attributes.getEmail()) ?
+                String.valueOf(attributes.getAttributes().get(attributes.getAttributeKey())) : attributes.getEmail();
         this.name = attributes.getName();
     }
 
@@ -68,7 +70,7 @@ public class PrincipalDetails implements Authentication, OAuth2User {
 
     @Override
     public String getName() {
-        return String.valueOf(this.getId());
+        return this.email;
     }
 
     public Long getId() {
