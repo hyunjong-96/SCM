@@ -1,5 +1,7 @@
 package com.scm.api.account.dto;
 
+import com.domain.account.models.LoginProvider;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

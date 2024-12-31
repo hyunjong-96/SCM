@@ -53,6 +53,7 @@ const login = async () => {
 
 <template>
   <div style="display: flex; justify-content: center; align-content: center;">
+    <div class="outer-container">
     <div class="form-container">
       <div class="item-container">
         <input class="text-container" v-model="account" autofocus placeholder="Account"/>
@@ -62,6 +63,7 @@ const login = async () => {
         <VBtn href="http://localhost:8080/oauth2/authorization/github"> Github </VBtn>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -105,6 +107,12 @@ const login = async () => {
 </template> -->
 
 <style scoped>
+.outer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Viewport height to ensure it occupies full screen height */
+  }
   .form-container{
     display: flex;
     flex-direction: column;

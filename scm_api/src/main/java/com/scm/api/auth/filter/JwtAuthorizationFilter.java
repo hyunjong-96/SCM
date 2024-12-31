@@ -1,16 +1,13 @@
 package com.scm.api.auth.filter;
 
 import com.scm.api.auth.provider.JwtAuthorizationProvider;
+import com.scm.api.exception.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
@@ -62,26 +59,30 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
          * 4. successHandler, failHandler 분기
          */
 
-        try{
+        try {
             String token = parseJwt(request);
 
-            if(token != null && jwtAUthorizationProvider.validateToken(token)) {
-                Authentication authentication = jwtAUthorizationProvider.authentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (token == null) {
+                throw new JwtException("jwt is null");
             }
 
-            filterChain.doFilter(request, response);
+            if (!jwtAUthorizationProvider.validateToken(token)) {
+                throw new JwtException("invalid jwt");
+            }
 
-        }
-        catch (Exception ex) {
-            //fail handler
+            Authentication authentication = jwtAUthorizationProvider.authentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            filterChain.doFilter(request, response);
+        } catch (Exception ex) {
+            throw new JwtException(ex.getMessage(), ex);
         }
     }
 
     private String parseJwt(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
 
-        if(StringUtils.hasText(token) && token.startsWith("Bearer ")) {
+        if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
             return token.substring(7);
         }
 

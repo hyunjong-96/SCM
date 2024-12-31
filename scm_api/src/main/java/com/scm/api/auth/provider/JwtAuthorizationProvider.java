@@ -1,6 +1,7 @@
 package com.scm.api.auth.provider;
 
 import com.scm.api.auth.model.AccountDetails;
+import com.scm.api.auth.model.PrincipalDetails;
 import com.scm.api.auth.service.AccountDetailService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -52,15 +53,16 @@ public class JwtAuthorizationProvider {
                 .setSigningKey(getSecretKey())
                 .build().parseClaimsJws(token);
 
-        return claims.getBody().getExpiration().before(new Date());
+        return claims.getBody().getExpiration().after(new Date());
     }
 
     public Authentication authentication(String token) {
         String username = this.getUsername(token);
 
-        UserDetails userDetails = accountDetailService.loadUserByUsername(username);
+        AccountDetails accountDetails = (AccountDetails) accountDetailService.loadUserByUsername(username);
 
-        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword());
+        return new PrincipalDetails(accountDetails);
+//        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword());
     }
 
     private String getUsername(String jwt) {

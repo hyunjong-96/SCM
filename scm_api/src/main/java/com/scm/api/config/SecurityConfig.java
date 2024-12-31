@@ -2,10 +2,8 @@ package com.scm.api.config;
 
 import com.scm.api.auth.filter.AuthCustomFilter;
 import com.scm.api.auth.filter.JwtAuthorizationFilter;
-import com.scm.api.auth.handler.BasicLoginSuccessHandler;
-import com.scm.api.auth.handler.LoginFailureHandler;
-import com.scm.api.auth.handler.LoginSuccessHandler;
-import com.scm.api.auth.handler.OAuthLoginSuccessHandler;
+import com.scm.api.auth.filter.exception.JwtExceptionFilter;
+import com.scm.api.auth.handler.*;
 import com.scm.api.auth.matcher.LoginRequestMatcher;
 import com.scm.api.auth.provider.AuthCustomProvider;
 import com.scm.api.auth.provider.JwtAuthorizationProvider;
@@ -51,11 +49,11 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo ->
                                 userInfo
                                         .userService(customOAuth2UserService))
-//                        .defaultSuccessUrl("/auth/redirect", true)
                                         .successHandler(oAuthLoginSuccessHandler)
                 )
                 .addFilterBefore(buildAuthCustomFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildJwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(buildJwtExceptionFilter(), JwtAuthorizationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
@@ -89,6 +87,10 @@ public class SecurityConfig {
     @Bean
     public JwtAuthorizationProvider buildJwtAuthorizationProvider() {
         return new JwtAuthorizationProvider(accountDetailService);
+    }
+
+    public JwtExceptionFilter buildJwtExceptionFilter() {
+        return new JwtExceptionFilter();
     }
 
     @Bean
