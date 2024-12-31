@@ -2,8 +2,8 @@ package com.scm.api.config;
 
 import com.scm.api.auth.filter.AuthCustomFilter;
 import com.scm.api.auth.filter.JwtAuthorizationFilter;
-import com.scm.api.auth.handler.LoginFailureHandler;
-import com.scm.api.auth.handler.LoginSuccessHandler;
+import com.scm.api.auth.filter.exception.JwtExceptionFilter;
+import com.scm.api.auth.handler.*;
 import com.scm.api.auth.matcher.LoginRequestMatcher;
 import com.scm.api.auth.provider.AuthCustomProvider;
 import com.scm.api.auth.provider.JwtAuthorizationProvider;
@@ -15,21 +15,17 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -39,7 +35,10 @@ public class SecurityConfig {
     private final AccountDetailService accountDetailService;
     private final CorsConfigurationSource customCorsConfigurationSource;
     private final LoginSuccessHandler loginSuccessHandler;
+    private final OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
+    private final BasicLoginSuccessHandler basicLoginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
+    private final OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -47,28 +46,19 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(customCorsConfigurationSource))
                 .formLogin(AbstractHttpConfigurer::disable)
+                .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo ->
+                                userInfo
+                                        .userService(customOAuth2UserService))
+                                        .successHandler(oAuthLoginSuccessHandler)
+                )
                 .addFilterBefore(buildAuthCustomFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildJwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(buildJwtExceptionFilter(), JwtAuthorizationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf(AbstractHttpConfigurer::disable)
-//                .cors(AbstractHttpConfigurer::disable)
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource))
-//                .httpBasic(AbstractHttpConfigurer::disable)
-//                .formLogin(AbstractHttpConfigurer::disable)
-//                .sessionManagement(c ->
-//                        c.sessionCreationPolicy(SessionCreationPolicy.NEVER))
-//                        .addFilterBefore(buildAuthCustomFilter(), UsernamePasswordAuthenticationFilter.class);
-////                .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
-////                .addFilterBefore(exceptionHandlerFilter, authenticationTokenFilter.getClass());
-//
-//        return http.build();
-//    }
 
     @Bean
     public AuthCustomFilter buildAuthCustomFilter() {
@@ -76,8 +66,8 @@ public class SecurityConfig {
 
         AuthCustomFilter customFilter = new AuthCustomFilter(matcher);
         customFilter.setAuthenticationManager(buildAuthenticationProviderManager());
-        customFilter.setAuthenticationSuccessHandler(loginSuccessHandler);
-        customFilter.setAuthenticationFailureHandler(buildFailureHandler());
+        customFilter.setAuthenticationSuccessHandler(basicLoginSuccessHandler);
+        customFilter.setAuthenticationFailureHandler(loginFailureHandler);
 
         return customFilter;
     }
@@ -99,18 +89,22 @@ public class SecurityConfig {
         return new JwtAuthorizationProvider(accountDetailService);
     }
 
+    public JwtExceptionFilter buildJwtExceptionFilter() {
+        return new JwtExceptionFilter();
+    }
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    public AuthenticationSuccessHandler buildSuccessHandler() {
-        return loginSuccessHandler;
-    }
+//    public AuthenticationSuccessHandler buildSuccessHandler() {
+//        return loginSuccessHandler;
+//    }
 
-    public AuthenticationFailureHandler buildFailureHandler() {
-        return loginFailureHandler;
-    }
+//    public AuthenticationFailureHandler buildFailureHandler() {
+//        return loginFailureHandler;
+//    }
 
 
 }

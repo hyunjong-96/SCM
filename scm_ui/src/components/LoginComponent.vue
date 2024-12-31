@@ -1,14 +1,20 @@
 <script setup>
 import api from '../modules/api.js'
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router'
 import { useCookies } from 'vue3-cookies';
+
+const OAUTH2_URL = process.env.VITE_OAUTH_LOGIN_URL
 
 const router = useRouter()
 const { cookies } = useCookies();
 // const visible = ref(false)
 const account = ref("")
 const password = ref("")
+
+onMounted(() => {
+  console.log('oauth2Url : ',OAUTH2_URL)
+})
 
 const login = async () => {
 
@@ -47,14 +53,17 @@ const login = async () => {
 
 <template>
   <div style="display: flex; justify-content: center; align-content: center;">
+    <div class="outer-container">
     <div class="form-container">
       <div class="item-container">
         <input class="text-container" v-model="account" autofocus placeholder="Account"/>
         <input class="text-container" v-model="password" placeholder="Password"/>
         <span style="margin-top: 5px; margin-bottom: 5px;"></span>
         <button class="button-container" @click="login">login</button>
+        <VBtn href="http://localhost:8080/oauth2/authorization/github"> Github </VBtn>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -98,6 +107,12 @@ const login = async () => {
 </template> -->
 
 <style scoped>
+.outer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Viewport height to ensure it occupies full screen height */
+  }
   .form-container{
     display: flex;
     flex-direction: column;

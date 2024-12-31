@@ -2,6 +2,9 @@ package com.domain.account.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.util.ObjectUtils;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,18 +22,23 @@ public class Account {
     private String password;
     @Column(name = "name")
     private String name;
+    @Column(name = "provider")
+    @Enumerated(value = EnumType.STRING)
+    private LoginProvider provider;
 
     @Builder
     public Account(
             Long id,
             String email,
             String password,
-            String name
+            String name,
+            LoginProvider provider
     ) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
+        this.provider = ObjectUtils.isEmpty(provider) ? LoginProvider.BASIC : provider;
     }
 
     public String getAccountPassword() {
