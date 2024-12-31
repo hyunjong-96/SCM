@@ -1,18 +1,24 @@
 package com.domain.account.service;
 
 import com.domain.account.dto.SaveAccountInput;
-import com.domain.account.models.Account;
-import com.domain.account.models.LoginProvider;
+import com.domain.account.models.*;
 import com.domain.account.repository.AccountRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
+import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
+import java.util.List;
+
+@Transactional
 @Service
 public class AccountService{
 
     private final AccountRepository accountRepository;
+    private final UserRoleService userRoleService;
+
+    public AccountService(AccountRepository accountRepository, UserRoleService userRoleService) {
+        this.accountRepository = accountRepository;
+        this.userRoleService = userRoleService;
+    }
 
     public void save(SaveAccountInput input) {
         Account newAccount = Account.builder()
@@ -23,6 +29,9 @@ public class AccountService{
                 .build();
 
         accountRepository.save(newAccount);
+
+        //UserRole 저장
+        userRoleService.save(newAccount.getId(), ScmRole.ROLE_USER);
     }
 
     public boolean isExistAccount(String email) {
@@ -31,5 +40,9 @@ public class AccountService{
 
     public Account findByEmail(String email) {
         return accountRepository.findByEmail(email);
+    }
+
+    public List<UserRole> findRoleByUserId(Long userId) {
+        return userRoleService.findByUserId(userId);
     }
 }

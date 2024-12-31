@@ -16,12 +16,15 @@ public class PrincipalDetails implements Authentication, OAuth2User {
     private String email;
     private String name;
 
+    private Collection<? extends GrantedAuthority> authorities;
+
     public PrincipalDetails(AccountDetails account) {
         this.account = account;
 
         this.id = account.getId();
         this.email = account.getEmail();
         this.name = account.getName();
+        this.authorities = account.getAuthorities();
     }
 
     public PrincipalDetails(OAuth2Attribute attributes) {
@@ -31,6 +34,7 @@ public class PrincipalDetails implements Authentication, OAuth2User {
         this.email = ObjectUtils.isEmpty(attributes.getEmail()) ?
                 String.valueOf(attributes.getAttributes().get(attributes.getAttributeKey())) : attributes.getEmail();
         this.name = attributes.getName();
+        this.authorities = attributes.getAuthorities();
     }
 
     @Override
@@ -40,7 +44,7 @@ public class PrincipalDetails implements Authentication, OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.authorities;
     }
 
     @Override

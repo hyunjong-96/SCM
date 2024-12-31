@@ -1,5 +1,7 @@
 package com.scm.api.auth.model;
 
+import com.domain.account.models.ScmRole;
+import com.domain.account.models.UserRole;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +9,6 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -30,7 +31,7 @@ public class OAuth2Attribute implements OAuth2User {
     private String attributeKey;
     private String email;
     private String name;
-    private String authority;
+    private List<ScmRole> authorities = Collections.EMPTY_LIST;
 
     private String accessToken;
 
@@ -56,12 +57,16 @@ public class OAuth2Attribute implements OAuth2User {
                 .email((String) attributes.get("email"))
                 .attributes(attributes)
                 .attributeKey(attributeKey)
-                .authority(getRole((Boolean) attributes.get("site_admin")))
+                .authorities(Collections.singletonList(getRole((Boolean) attributes.get("site_admin"))))
                 .build();
     }
 
-    private static String getRole(Boolean isAdmin) {
-        return isAdmin(isAdmin) ? "ROLE_ADMIN" : "ROLE_USER";
+    public void setAuthorities(List<UserRole> roleList) {
+        this.authorities.addAll(roleList.stream().map(UserRole::getRole).toList());
+    }
+
+    private static ScmRole getRole(Boolean isAdmin) {
+        return isAdmin(isAdmin) ? ScmRole.ROLE_ADMIN : ScmRole.ROLE_USER;
     }
 
     private static boolean isAdmin(Boolean isAdmin) {
@@ -79,7 +84,8 @@ public class OAuth2Attribute implements OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(this.authority));
+        return this.authorities.stream().map(ScmRole::name).map(role -> new SimpleGrantedAuthority(role.toUpperCase())).toList();
+//        return Collections.singleton(new SimpleGrantedAuthority(this.authority));
     }
 
     @Override

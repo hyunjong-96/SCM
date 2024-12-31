@@ -32,10 +32,10 @@ public class LoginSuccessHandler {
     public String getRedirectURL(HttpServletResponse response, Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-        log.info( "Success login. JWT 발급. username: {}" ,principalDetails.getUserName());
+        log.info( "Success login. JWT 발급. username: {}" ,principalDetails.getEmail());
 
         //todo : 로그인 성공 후 JWT 발급 후 성공 화면으로 redirect할 부분.
-        String accessToken = jwtAuthorizationProvider.generateToken(String.valueOf(principalDetails.getId()));
+        String accessToken = jwtAuthorizationProvider.generateToken(String.valueOf(principalDetails.getEmail()));
 
         String redirectUrl = UriComponentsBuilder.fromUriString(redirectURL)
                 .queryParam("scm-token", accessToken)

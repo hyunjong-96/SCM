@@ -1,23 +1,31 @@
 package com.scm.api.auth.model;
 
 import com.domain.account.models.Account;
+import com.domain.account.models.ScmRole;
+import com.domain.account.models.UserRole;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 public class AccountDetails extends Account implements UserDetails {
 
-    public AccountDetails(Account account) {
+    private List<String> authorities;
+
+    public AccountDetails(Account account, List<UserRole> authorities) {
         this.setId(account.getId());
         this.setEmail(account.getEmail());
         this.setName(account.getName());
         this.setPassword(account.getPassword());
+
+        this.authorities = authorities.stream().map(UserRole::getRole).map(ScmRole::name).toList();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities.stream().map(role -> new SimpleGrantedAuthority(role.toUpperCase())).toList();
     }
 
     @Override

@@ -2,11 +2,14 @@ package com.scm.api.account;
 
 import com.scm.api.account.dto.SignInInput;
 import com.scm.api.account.service.AccountFacadeService;
+import com.scm.api.auth.model.PrincipalDetails;
 import com.scm.api.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -33,5 +36,11 @@ public class AccountController {
         accountFacadeService.signIn(input);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/test")
+    public ResponseEntity<String> test(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return new ResponseEntity<>(principalDetails.getUserName(),HttpStatus.OK);
     }
 }
