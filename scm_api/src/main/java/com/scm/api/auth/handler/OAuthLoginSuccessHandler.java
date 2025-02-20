@@ -9,11 +9,14 @@ import com.scm.api.auth.provider.JwtAuthorizationProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -29,14 +32,35 @@ import java.io.IOException;
  * 2024-12-30        leehyunjong       최초 생성
  */
 @Slf4j
+@RequiredArgsConstructor
 @Component
-public class OAuthLoginSuccessHandler extends LoginSuccessHandler implements AuthenticationSuccessHandler {
+public class OAuthLoginSuccessHandler implements AuthenticationSuccessHandler {
+
+    @Value("${login.success.url}")
+    protected String redirectURL;
 
     private final AccountService accountService;
+    private final JwtAuthorizationProvider jwtAuthorizationProvider;
 
-    public OAuthLoginSuccessHandler(JwtAuthorizationProvider jwtAuthorizationProvider, AccountService accountService) {
-        super(jwtAuthorizationProvider);
-        this.accountService = accountService;
+//    public OAuthLoginSuccessHandler(JwtAuthorizationProvider jwtAuthorizationProvider, AccountService accountService) {
+////        super(jwtAuthorizationProvider);
+//        this.accountService = accountService;
+//    }
+
+    public String getRedirectURL(HttpServletResponse response, Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+        log.info( "Success login. JWT 발급. username: {}" ,principalDetails.getEmail());
+
+        //todo : 로그인 성공 후 JWT 발급 후 성공 화면으로 redirect할 부분.
+        String accessToken = jwtAuthorizationProvider.generateToken(String.valueOf(principalDetails.getEmail()));
+
+        String redirectUrl = UriComponentsBuilder.fromUriString(redirectURL)
+                .queryParam("scm-token", accessToken)
+                .build()
+                .toString();
+
+        return redirectUrl;
     }
 
     @Override
@@ -57,7 +81,7 @@ public class OAuthLoginSuccessHandler extends LoginSuccessHandler implements Aut
             accountService.save(saveAccountInput);
         }
 
-        String redirectUrl = super.getRedirectURL(response, authentication);
+        String redirectUrl = this.getRedirectURL(response, authentication);
 
         response.sendRedirect(redirectUrl);
     }

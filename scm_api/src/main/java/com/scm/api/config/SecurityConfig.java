@@ -9,6 +9,7 @@ import com.scm.api.auth.provider.AuthCustomProvider;
 import com.scm.api.auth.provider.JwtAuthorizationProvider;
 import com.scm.api.auth.service.AccountDetailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,8 +34,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public class SecurityConfig {
 
     private final AccountDetailService accountDetailService;
+    @Qualifier("customCorsConfigurationSource")
     private final CorsConfigurationSource customCorsConfigurationSource;
-    private final LoginSuccessHandler loginSuccessHandler;
+    private final JwtAuthorizationProvider jwtAuthorizationProvider;
+//    private final LoginSuccessHandler loginSuccessHandler;
     private final OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
     private final BasicLoginSuccessHandler basicLoginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
@@ -46,11 +49,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(customCorsConfigurationSource))
                 .formLogin(AbstractHttpConfigurer::disable)
-                .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo ->
-                                userInfo
-                                        .userService(customOAuth2UserService))
-                                        .successHandler(oAuthLoginSuccessHandler)
-                )
+//                .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo ->
+//                                userInfo
+//                                        .userService(customOAuth2UserService))
+//                                        .successHandler(oAuthLoginSuccessHandler)
+//                )
                 .addFilterBefore(buildAuthCustomFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildJwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildJwtExceptionFilter(), JwtAuthorizationFilter.class)
@@ -81,13 +84,13 @@ public class SecurityConfig {
     }
 
     public JwtAuthorizationFilter buildJwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(buildJwtAuthorizationProvider());
+        return new JwtAuthorizationFilter(jwtAuthorizationProvider);
     }
 
-    @Bean
-    public JwtAuthorizationProvider buildJwtAuthorizationProvider() {
-        return new JwtAuthorizationProvider(accountDetailService);
-    }
+//    @Bean
+//    public JwtAuthorizationProvider buildJwtAuthorizationProvider() {
+//        return new JwtAuthorizationProvider(accountDetailService);
+//    }
 
     public JwtExceptionFilter buildJwtExceptionFilter() {
         return new JwtExceptionFilter();
