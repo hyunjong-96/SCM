@@ -2,6 +2,7 @@ package com.scm.api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -25,6 +26,7 @@ public class CorsConfig {
 
     private final List<String> AllowOriginList = List.of("http://localhost:8080","http://localhost:8081");
 
+    @Primary
     @Bean(value = "customCorsConfigurationSource")
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

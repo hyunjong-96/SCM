@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component
+//@Component
 public class LoginSuccessHandler {
 
     @Value("${login.success.url}")
