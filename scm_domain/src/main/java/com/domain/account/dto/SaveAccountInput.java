@@ -12,13 +12,15 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 @NoArgsConstructor
 public class SaveAccountInput {
 
+    private Long id;
     private String email;
     private String password;
     private String name;
     private LoginProvider provider;
 
     @Builder
-    public SaveAccountInput(String email, String password, String name, LoginProvider provider) {
+    public SaveAccountInput(Long id, String email, String password, String name, LoginProvider provider) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
