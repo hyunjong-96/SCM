@@ -49,11 +49,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(customCorsConfigurationSource))
                 .formLogin(AbstractHttpConfigurer::disable)
-//                .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo ->
-//                                userInfo
-//                                        .userService(customOAuth2UserService))
-//                                        .successHandler(oAuthLoginSuccessHandler)
-//                )
+                .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo ->
+                                userInfo
+                                        .userService(customOAuth2UserService))
+                                        .successHandler(oAuthLoginSuccessHandler)
+                )
                 .addFilterBefore(buildAuthCustomFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildJwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildJwtExceptionFilter(), JwtAuthorizationFilter.class)
