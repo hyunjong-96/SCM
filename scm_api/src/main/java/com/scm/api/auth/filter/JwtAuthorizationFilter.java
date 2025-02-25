@@ -32,7 +32,7 @@ import java.util.*;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final PathMatcher pathMatcher = new AntPathMatcher();
-    private final Set<String> SkipPattern = new HashSet<>(List.of("/api/auth/**", "/api/account/save"));
+    private final Set<String> SkipPattern = new HashSet<>(List.of("/auth/**", "/api/auth/**", "/api/account/save","/favicon.ico"));
     private final JwtAuthorizationProvider jwtAUthorizationProvider;
 
     public JwtAuthorizationFilter(JwtAuthorizationProvider jwtAUthorizationProvider) {
