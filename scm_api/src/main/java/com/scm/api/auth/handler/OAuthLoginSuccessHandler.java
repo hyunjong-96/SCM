@@ -69,17 +69,17 @@ public class OAuthLoginSuccessHandler implements AuthenticationSuccessHandler {
         OAuth2AuthenticationToken auth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
 
 //        auth2AuthenticationToken.
-        if(!accountService.isExistAccount(auth2AuthenticationToken.getName())) {
-            PrincipalDetails principalDetails = (PrincipalDetails)auth2AuthenticationToken.getPrincipal();
-
-            SaveAccountInput saveAccountInput = SaveAccountInput.builder()
-                    .email(auth2AuthenticationToken.getName())
-                    .provider(LoginProvider.getLoginProvider(auth2AuthenticationToken.getAuthorizedClientRegistrationId()))
-                    .name(principalDetails.getUserName())
-                    .build();
-
-            accountService.save(saveAccountInput);
-        }
+//        if(!accountService.isExistAccount(auth2AuthenticationToken.getName())) {
+//            PrincipalDetails principalDetails = (PrincipalDetails)auth2AuthenticationToken.getPrincipal();
+//
+//            SaveAccountInput saveAccountInput = SaveAccountInput.builder()
+//                    .email(auth2AuthenticationToken.getName())
+//                    .provider(LoginProvider.getLoginProvider(auth2AuthenticationToken.getAuthorizedClientRegistrationId()))
+//                    .name(principalDetails.getUserName())
+//                    .build();
+//
+//            accountService.save(saveAccountInput);
+//        }
 
         String redirectUrl = this.getRedirectURL(response, authentication);
 

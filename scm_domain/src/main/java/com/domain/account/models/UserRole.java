@@ -19,21 +19,25 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(UserRolePk.class)
-@Entity
+//@IdClass(UserRolePk.class)
+@Entity(name = "user_role")
 public class UserRole implements Serializable {
-    @Id
-    @Column(name = "user_id")
-    private Long userId;
+//    @Id
+//    @Column(name = "user_id")
+//    private Long userId;
+//
+//    @Id
+//    @Enumerated(value = EnumType.STRING)
+//    @Column(name = "role")
+//    private ScmRole role;
 
-    @Id
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "role")
-    private ScmRole role;
+    @EmbeddedId
+    private UserRoleId userRoleId;
 
     @Builder
-    public UserRole(Long userId, ScmRole role) {
-        this.userId = userId;
-        this.role = role;
+    public UserRole(UserRoleId userRoleId) {
+//        this.userId = userId;
+//        this.role = role;
+        this.userRoleId = userRoleId;
     }
 }

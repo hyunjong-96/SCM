@@ -1,5 +1,6 @@
 package com.scm.api.auth.model;
 
+import com.domain.account.models.LoginProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -13,6 +14,7 @@ public class PrincipalDetails implements Authentication, OAuth2User {
     private OAuth2Attribute attribute;
 
     private Long id;
+    private LoginProvider provider;
     private String email;
     private String name;
 
@@ -21,7 +23,8 @@ public class PrincipalDetails implements Authentication, OAuth2User {
     public PrincipalDetails(AccountDetails account) {
         this.account = account;
 
-        this.id = account.getId();
+        this.id = account.getAccountId().getId();
+        this.provider = account.getAccountId().getProvider();
         this.email = account.getEmail();
         this.name = account.getName();
         this.authorities = account.getAuthorities();

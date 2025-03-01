@@ -5,6 +5,7 @@ import com.domain.account.models.*;
 import com.domain.account.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -21,18 +22,28 @@ public class AccountService{
     }
 
     public void save(SaveAccountInput input) {
+
+        Long id = input.getId();
+        if(ObjectUtils.isEmpty(input.getProvider()) || input.getProvider().equals(LoginProvider.BASIC)) {
+            id = this.getBasicProviderMaxId();
+        }
+
+        AccountId newAccountId = AccountId.builder()
+                .id(id)
+                .provider(input.getProvider())
+                .build();
+
         Account newAccount = Account.builder()
-                .id(input.getId())
+                .accountId(newAccountId)
                 .email(input.getEmail())
                 .password(input.getPassword())
                 .name(input.getName())
-                .provider(input.getProvider())
                 .build();
 
         accountRepository.save(newAccount);
 
         //UserRole 저장
-        userRoleService.save(newAccount.getId(), ScmRole.ROLE_USER);
+        userRoleService.save(newAccount.getAccountId(), ScmRole.ROLE_USER);
     }
 
     public boolean isExistAccount(String email) {
@@ -43,11 +54,20 @@ public class AccountService{
         return accountRepository.findByEmail(email);
     }
 
-    public List<UserRole> findRoleByUserId(Long userId) {
-        return userRoleService.findByUserId(userId);
+    public List<UserRole> findRoleByUserId(AccountId accountId) {
+        return userRoleService.findByUserId(accountId);
     }
 
-    public Account findByIdAndProvider(Long id, LoginProvider provider) {
-        return accountRepository.findByIdAndProvider(id, provider);
+    public Account findByPk(AccountId accountId) {
+//        return accountRepository.findByIdAndProvider(id, provider);
+        return accountRepository.findById(accountId).orElse(null);
+    }
+
+    public Long getProviderMaxId(LoginProvider provider) {
+        return accountRepository.findAccountId_IdByAccountId_Provider(provider);
+    }
+
+    public Long getBasicProviderMaxId() {
+        return getProviderMaxId(LoginProvider.BASIC);
     }
 }

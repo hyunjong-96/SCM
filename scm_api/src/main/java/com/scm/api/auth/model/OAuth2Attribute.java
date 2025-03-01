@@ -2,6 +2,7 @@ package com.scm.api.auth.model;
 
 import com.domain.account.models.ScmRole;
 import com.domain.account.models.UserRole;
+import com.domain.account.models.UserRoleId;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class OAuth2Attribute implements OAuth2User {
     private String attributeKey;
     private String email;
     private String name;
-    private List<ScmRole> authorities = Collections.EMPTY_LIST;
+    private List<ScmRole> authorities;
 
     private String accessToken;
 
@@ -62,7 +63,7 @@ public class OAuth2Attribute implements OAuth2User {
     }
 
     public void setAuthorities(List<UserRole> roleList) {
-        this.authorities.addAll(roleList.stream().map(UserRole::getRole).toList());
+        this.authorities.addAll(roleList.stream().map(UserRole::getUserRoleId).map(UserRoleId::getRole).toList());
     }
 
     private static ScmRole getRole(Boolean isAdmin) {

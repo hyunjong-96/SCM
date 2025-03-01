@@ -2,6 +2,7 @@ package com.scm.api.auth.service;
 
 import com.domain.account.dto.SaveAccountInput;
 import com.domain.account.models.Account;
+import com.domain.account.models.AccountId;
 import com.domain.account.models.LoginProvider;
 import com.domain.account.models.UserRole;
 import com.domain.account.service.AccountService;
@@ -56,8 +57,12 @@ public class CustomOAuth2UserService implements OAuth2UserService {
         //존재하는 account의 oauth 로그인인 경우 권한 세팅
         if(accountService.isExistAccount(oAuth2User.getName())) {
 //            Account account = accountService.findByEmail(oAuth2User.getName());
-            Account account = accountService.findByIdAndProvider(oAuth2Attribute.getId(), LoginProvider.valuesMap.get(registrationId));
-            List<UserRole> userRole = accountService.findRoleByUserId(account.getId());
+            AccountId accountId = AccountId.builder()
+                    .id(oAuth2Attribute.getId())
+                    .provider(LoginProvider.valuesMap.get(registrationId))
+                    .build();
+            Account account = accountService.findByPk(accountId);
+            List<UserRole> userRole = accountService.findRoleByUserId(account.getAccountId());
 
             oAuth2Attribute.setAuthorities(userRole);
         }
