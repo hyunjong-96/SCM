@@ -22,6 +22,7 @@ public class AccountService{
 
     public void save(SaveAccountInput input) {
         Account newAccount = Account.builder()
+                .id(input.getId())
                 .email(input.getEmail())
                 .password(input.getPassword())
                 .name(input.getName())
@@ -44,5 +45,9 @@ public class AccountService{
 
     public List<UserRole> findRoleByUserId(Long userId) {
         return userRoleService.findByUserId(userId);
+    }
+
+    public Account findByIdAndProvider(Long id, LoginProvider provider) {
+        return accountRepository.findByIdAndProvider(id, provider);
     }
 }
