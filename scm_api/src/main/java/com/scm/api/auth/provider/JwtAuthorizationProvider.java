@@ -1,5 +1,6 @@
 package com.scm.api.auth.provider;
 
+import com.domain.account.models.LoginProvider;
 import com.scm.api.auth.model.AccountDetails;
 import com.scm.api.auth.model.PrincipalDetails;
 import com.scm.api.auth.service.AccountDetailService;
@@ -21,6 +22,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * packageName    : com.scm.api.auth.provider
@@ -78,9 +81,14 @@ public class JwtAuthorizationProvider {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String id, LoginProvider provider) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("provider",provider);
+        claims.put("id",id);
+
         return Jwts.builder()
-                .setSubject(username)
+//                .setSubject(username)
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + EXPIRED_TIME))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)

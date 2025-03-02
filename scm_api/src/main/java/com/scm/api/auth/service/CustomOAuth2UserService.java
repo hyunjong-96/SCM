@@ -77,7 +77,7 @@ public class CustomOAuth2UserService implements OAuth2UserService {
             accountService.save(saveAccountInput);
         }
 
-        return new PrincipalDetails(oAuth2Attribute);
+        return new PrincipalDetails(oAuth2Attribute, registrationId);
     }
 
 }

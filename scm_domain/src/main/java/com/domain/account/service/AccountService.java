@@ -43,7 +43,9 @@ public class AccountService{
         accountRepository.save(newAccount);
 
         //UserRole 저장
-        userRoleService.save(newAccount.getAccountId(), ScmRole.ROLE_USER);
+        if(userRoleService.findByUserId(newAccountId).isEmpty()) {
+            userRoleService.save(newAccount.getAccountId(), ScmRole.ROLE_USER);
+        }
     }
 
     public boolean isExistAccount(String email) {

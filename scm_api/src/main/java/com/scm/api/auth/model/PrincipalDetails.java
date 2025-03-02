@@ -30,7 +30,7 @@ public class PrincipalDetails implements Authentication, OAuth2User {
         this.authorities = account.getAuthorities();
     }
 
-    public PrincipalDetails(OAuth2Attribute attributes) {
+    public PrincipalDetails(OAuth2Attribute attributes, String provider) {
         this.attribute = attributes;
 
         this.id = attributes.getId();
@@ -38,6 +38,7 @@ public class PrincipalDetails implements Authentication, OAuth2User {
                 String.valueOf(attributes.getAttributes().get(attributes.getAttributeKey())) : attributes.getEmail();
         this.name = attributes.getName();
         this.authorities = attributes.getAuthorities();
+        this.provider = LoginProvider.valuesMap.get(provider);
     }
 
     @Override
@@ -91,4 +92,6 @@ public class PrincipalDetails implements Authentication, OAuth2User {
     public String getUserName() {
         return this.name;
     }
+
+    public LoginProvider getProvider() {return this.provider;}
 }

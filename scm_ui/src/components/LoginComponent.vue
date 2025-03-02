@@ -39,6 +39,8 @@ const login = async () => {
     //   return;
     // }
 
+    alert(token)
+
     cookies.set("scm-token", token);
 
     router.push("/dashboard")
