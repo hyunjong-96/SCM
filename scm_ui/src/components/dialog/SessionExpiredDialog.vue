@@ -10,6 +10,7 @@ const isVisible = computed(() => alertStore.isVisibleSessionExpired);
 const titleMessage = computed(() => alertStore.titleMessage);
 const message = computed(() => alertStore.message);
 const hideAlert = () => {
+  console.log('hide alert');
     alertStore.hideAlert();
     router.push('/login');
 }

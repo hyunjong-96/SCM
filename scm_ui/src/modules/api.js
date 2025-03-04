@@ -76,18 +76,21 @@ instance.interceptors.response.use(
         const authStore = useAuthStore();
 
         console.log('error status : ',error.response)
+        console.log('error status : ',error.response.status)
 
-        if(error.response && error.response.status == '401') {
-            console.log('401 test!!!')
+        if(error.response && error.response.status == 403) {
+            console.log('403 test!!!')
 
             authStore.logout();
         }
         else {
-            let title = "다른 에러";
-            let message = "다른 에러 메세지";
+            let title = error.response.data.statusCode;
+            let message = error.response.data.message;
 
             alertStore.showAlert(title, message);
         }
+
+        return
     }
 )
 

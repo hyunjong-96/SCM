@@ -1,5 +1,6 @@
 <script setup>
-import AlertDialog from './components/dialog/AlertDialog.vue'
+import SessionExpiredDialog from './components/dialog/SessionExpiredDialog.vue'
+import ErrorDialog from './components/dialog/ErrorDialog.vue'
 
 </script>
 
@@ -7,7 +8,8 @@ import AlertDialog from './components/dialog/AlertDialog.vue'
   <v-app>
     <v-main>
       <router-view/>
-      <AlertDialog/>
+      <SessionExpiredDialog/>
+      <ErrorDialog/>
     </v-main>
   </v-app>
 </template>
