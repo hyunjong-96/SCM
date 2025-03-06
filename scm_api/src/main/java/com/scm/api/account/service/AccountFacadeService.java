@@ -31,7 +31,7 @@ public class AccountFacadeService {
 
     public void signIn(SignInInput input) throws GlobalException {
 
-        if(accountService.isExistAccount(input.getEmail())) {
+        if(accountService.findByEmail(input.getEmail()) == null) {
             throw new GlobalException(input.getEmail() + "is exist");
         }
 

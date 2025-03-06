@@ -55,7 +55,7 @@ public class CustomOAuth2UserService implements OAuth2UserService {
                 OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
         //존재하는 account의 oauth 로그인인 경우 권한 세팅
-        if(accountService.isExistAccount(oAuth2User.getName())) {
+        if(accountService.isExistAccount(Long.parseLong(oAuth2User.getName()), registrationId)) {
 //            Account account = accountService.findByEmail(oAuth2User.getName());
             AccountId accountId = AccountId.builder()
                     .id(oAuth2Attribute.getId())

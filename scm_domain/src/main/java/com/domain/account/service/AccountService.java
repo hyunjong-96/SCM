@@ -48,8 +48,15 @@ public class AccountService{
         }
     }
 
-    public boolean isExistAccount(String email) {
-        return accountRepository.findByEmail(email) != null;
+    public boolean isExistAccount(Long id, String provider) {
+        LoginProvider loginProvider = LoginProvider.valuesMap.get(provider);
+
+        if(provider == null) {
+            return false;
+        }
+        AccountId accountId = new AccountId(id, loginProvider);
+
+        return accountRepository.findById(accountId).isPresent();
     }
 
     public Account findByEmail(String email) {

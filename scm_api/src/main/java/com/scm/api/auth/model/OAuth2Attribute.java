@@ -32,7 +32,7 @@ public class OAuth2Attribute implements OAuth2User {
     private String attributeKey;
     private String email;
     private String name;
-    private List<ScmRole> authorities;
+    private List<ScmRole> authorities = new ArrayList<>();
 
     private String accessToken;
 
@@ -63,7 +63,7 @@ public class OAuth2Attribute implements OAuth2User {
     }
 
     public void setAuthorities(List<UserRole> roleList) {
-        this.authorities.addAll(roleList.stream().map(UserRole::getUserRoleId).map(UserRoleId::getRole).toList());
+        this.authorities = new ArrayList<>(roleList.stream().map(UserRole::getUserRoleId).map(UserRoleId::getRole).toList());
     }
 
     private static ScmRole getRole(Boolean isAdmin) {
