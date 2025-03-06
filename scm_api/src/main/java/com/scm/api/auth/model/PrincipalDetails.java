@@ -1,5 +1,6 @@
 package com.scm.api.auth.model;
 
+import com.domain.account.models.Account;
 import com.domain.account.models.LoginProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +18,7 @@ public class PrincipalDetails implements Authentication, OAuth2User {
     private LoginProvider provider;
     private String email;
     private String name;
+    private String providerAccessToken;
 
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -30,7 +32,7 @@ public class PrincipalDetails implements Authentication, OAuth2User {
         this.authorities = account.getAuthorities();
     }
 
-    public PrincipalDetails(OAuth2Attribute attributes, String provider) {
+    public PrincipalDetails(OAuth2Attribute attributes, String provider, String providerAccessToken) {
         this.attribute = attributes;
 
         this.id = attributes.getId();
@@ -39,6 +41,7 @@ public class PrincipalDetails implements Authentication, OAuth2User {
         this.name = attributes.getName();
         this.authorities = attributes.getAuthorities();
         this.provider = LoginProvider.valuesMap.get(provider);
+        this.providerAccessToken = providerAccessToken;
     }
 
     @Override
@@ -94,4 +97,6 @@ public class PrincipalDetails implements Authentication, OAuth2User {
     }
 
     public LoginProvider getProvider() {return this.provider;}
+
+    public String getProviderAccessToken() {return this.providerAccessToken;}
 }
