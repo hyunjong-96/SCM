@@ -1,6 +1,7 @@
 package com.domain.account.service;
 
 import com.domain.account.dto.SaveUserTokenInput;
+import com.domain.account.models.AccountId;
 import com.domain.account.models.UserToken;
 import com.domain.account.repository.UserTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,4 +37,9 @@ public class UserTokenService {
     public UserToken findByOauthAccessToken(String oauthAccessToken) {
         return userTokenRepository.findByOauthAccessToken(oauthAccessToken);
     }
+
+    public UserToken findUsersToken(AccountId accountId) {
+        return userTokenRepository.findById(accountId).orElse(null);
+    }
+
 }

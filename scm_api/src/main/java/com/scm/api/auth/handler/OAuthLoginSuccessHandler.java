@@ -60,7 +60,8 @@ public class OAuthLoginSuccessHandler implements AuthenticationSuccessHandler {
         //todo : 로그인 성공 후 JWT 발급 후 성공 화면으로 redirect할 부분.
         String accessToken = jwtAuthorizationProvider.generateToken(String.valueOf(principalDetails.getId()), principalDetails.getProvider());
 
-        UserToken userToken = userTokenService.findByOauthAccessToken(principalDetails.getProviderAccessToken());
+//        UserToken userToken = userTokenService.findByOauthAccessToken(principalDetails.getProviderAccessToken());
+        UserToken userToken = userTokenService.findUsersToken(principalDetails.getAccount().getAccountId());
         if(userToken == null) {
             SaveUserTokenInput saveUserTokenInput = SaveUserTokenInput.builder()
                     .accountId(new AccountId(principalDetails.getId(), principalDetails.getProvider()))

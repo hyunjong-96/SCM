@@ -6,6 +6,7 @@ import com.domain.account.models.AccountId;
 import com.domain.account.models.LoginProvider;
 import com.domain.account.models.UserRole;
 import com.domain.account.service.AccountService;
+import com.scm.api.auth.model.AccountDetails;
 import com.scm.api.auth.model.OAuth2Attribute;
 import com.scm.api.auth.model.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,7 @@ public class CustomOAuth2UserService implements OAuth2UserService {
         OAuth2Attribute oAuth2Attribute =
                 OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
+        AccountDetails princialAccount;
         //존재하는 account의 oauth 로그인인 경우 권한 세팅
         if(accountService.isExistAccount(Long.parseLong(oAuth2User.getName()), registrationId)) {
 //            Account account = accountService.findByEmail(oAuth2User.getName());
@@ -65,6 +67,7 @@ public class CustomOAuth2UserService implements OAuth2UserService {
             List<UserRole> userRole = accountService.findRoleByUserId(account.getAccountId());
 
             oAuth2Attribute.setAuthorities(userRole);
+            princialAccount = new AccountDetails(account, userRole);
         }
         else {
             SaveAccountInput saveAccountInput = SaveAccountInput.builder()
@@ -74,10 +77,13 @@ public class CustomOAuth2UserService implements OAuth2UserService {
                     .provider(LoginProvider.valuesMap.get(registrationId))
                     .build();
 
-            accountService.save(saveAccountInput);
+            Account newAccount = accountService.save(saveAccountInput);
+            List<UserRole> userRole = accountService.findRoleByUserId(newAccount.getAccountId());
+
+            princialAccount = new AccountDetails(newAccount, userRole);
         }
 
-        return new PrincipalDetails(oAuth2Attribute, registrationId, userRequest.getAccessToken().getTokenValue());
+        return new PrincipalDetails(princialAccount, oAuth2Attribute, registrationId, userRequest.getAccessToken().getTokenValue());
     }
 
 }

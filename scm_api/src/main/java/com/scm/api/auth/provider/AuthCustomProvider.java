@@ -39,7 +39,7 @@ public class AuthCustomProvider implements AuthenticationProvider {
 
 //        Authentication principal = new PrincipalDetails((AccountDetails) principalDetail);
 
-        return new PrincipalDetails((AccountDetails) principalDetail);
+        return new PrincipalDetails((AccountDetails) principalDetail, null);
     }
 
     @Override

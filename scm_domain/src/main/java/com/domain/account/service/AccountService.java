@@ -21,7 +21,7 @@ public class AccountService{
         this.userRoleService = userRoleService;
     }
 
-    public void save(SaveAccountInput input) {
+    public Account save(SaveAccountInput input) {
 
         Long id = input.getId();
         if(ObjectUtils.isEmpty(input.getProvider()) || input.getProvider().equals(LoginProvider.BASIC)) {
@@ -46,6 +46,8 @@ public class AccountService{
         if(userRoleService.findByUserId(newAccountId).isEmpty()) {
             userRoleService.save(newAccount.getAccountId(), ScmRole.ROLE_USER);
         }
+
+        return newAccount;
     }
 
     public boolean isExistAccount(Long id, String provider) {

@@ -22,7 +22,7 @@ public class PrincipalDetails implements Authentication, OAuth2User {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public PrincipalDetails(AccountDetails account) {
+    public PrincipalDetails(AccountDetails account, String providerAccessToken) {
         this.account = account;
 
         this.id = account.getAccountId().getId();
@@ -30,9 +30,12 @@ public class PrincipalDetails implements Authentication, OAuth2User {
         this.email = account.getEmail();
         this.name = account.getName();
         this.authorities = account.getAuthorities();
+
+        this.providerAccessToken = providerAccessToken;
     }
 
-    public PrincipalDetails(OAuth2Attribute attributes, String provider, String providerAccessToken) {
+    public PrincipalDetails(AccountDetails account, OAuth2Attribute attributes, String provider, String providerAccessToken) {
+        this.account = account;
         this.attribute = attributes;
 
         this.id = attributes.getId();
@@ -99,4 +102,6 @@ public class PrincipalDetails implements Authentication, OAuth2User {
     public LoginProvider getProvider() {return this.provider;}
 
     public String getProviderAccessToken() {return this.providerAccessToken;}
+
+    public Account getAccount() {return this.account;}
 }
