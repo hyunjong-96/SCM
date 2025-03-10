@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
@@ -24,12 +23,11 @@ import java.util.Map;
  * 2025/03/09        leehyunjong       최초 생성
  */
 @RequiredArgsConstructor
-@Component
 public class RestTemplateService {
 
     public final RestTemplateUtils restTemplateUtils;
 
-    public <T> ResponseEntity<List<T>> request(HttpHeaders httpHeaders, HttpMethod httpMethod, UriComponentsBuilder uri, Class<T> responseType) throws GlobalException {
+    public <T> ResponseEntity<List<T>> requestGetList(HttpHeaders httpHeaders, HttpMethod httpMethod, UriComponentsBuilder uri, Class<T> responseType) throws GlobalException {
 
         if(httpMethod.equals(HttpMethod.GET) ) {
 

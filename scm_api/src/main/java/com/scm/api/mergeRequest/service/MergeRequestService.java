@@ -30,7 +30,7 @@ public class MergeRequestService {
     public void test() throws GlobalException {
         StringBuilder sb = new StringBuilder();
         sb.append("/repos/hyunjong-96/SCM/branches");
-        ResponseEntity<List<GithubBranchVO>> result = githubRestTemplateService.requestGet(sb.toString(), GithubBranchVO.class);
+        ResponseEntity<List<GithubBranchVO>> result = githubRestTemplateService.requestGetList(sb.toString(), GithubBranchVO.class);
 
         log.info(result.toString());
     }

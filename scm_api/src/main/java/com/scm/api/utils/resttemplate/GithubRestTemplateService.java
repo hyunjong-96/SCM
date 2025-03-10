@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.HashMap;
@@ -26,7 +25,6 @@ import java.util.Map;
  * -----------------------------------------------------------
  * 2025/03/09        leehyunjong       최초 생성
  */
-@Component
 public class GithubRestTemplateService extends RestTemplateService{
     private final String defaultUri = "https://api.github.com";
 
@@ -34,11 +32,11 @@ public class GithubRestTemplateService extends RestTemplateService{
         super(restTemplateUtils);
     }
 
-    public <T> ResponseEntity<List<T>> requestGet(String uri, Class<T> responseType) throws GlobalException {
+    public <T> ResponseEntity<List<T>> requestGetList(String uri, Class<T> responseType) throws GlobalException {
         HttpHeaders httpHeaders = getHttpHeaders();
         UriComponentsBuilder uriBuilder = this.buildGithubUri(uri);
 
-        return super.request(httpHeaders, HttpMethod.GET, uriBuilder, responseType);
+        return super.requestGetList(httpHeaders, HttpMethod.GET, uriBuilder, responseType);
     }
 
     private UriComponentsBuilder buildGithubUri(String uri) {
