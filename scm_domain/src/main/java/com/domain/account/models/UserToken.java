@@ -1,5 +1,6 @@
 package com.domain.account.models;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -34,5 +35,15 @@ public class UserToken {
         this.accountId = accountId;
         this.oauthAccessToken = oAuthAccessToken;
         this.scmAccessToken = scmAccessToken;
+    }
+
+    public void updateToken(String oauthAccessToken, String scmAccessToken) {
+        if(!StringUtils.isEmpty(oauthAccessToken)) {
+            this.oauthAccessToken = oauthAccessToken;
+        }
+
+        if(!StringUtils.isEmpty(scmAccessToken)) {
+            this.scmAccessToken = scmAccessToken;
+        }
     }
 }

@@ -1,11 +1,6 @@
 package com.scm.api.auth.handler;
 
-import com.domain.account.dto.SaveAccountInput;
-import com.domain.account.dto.SaveUserTokenInput;
-import com.domain.account.models.Account;
-import com.domain.account.models.AccountId;
-import com.domain.account.models.LoginProvider;
-import com.domain.account.models.UserToken;
+import com.domain.account.dto.TokenCreateOrUpdateInput;
 import com.domain.account.service.AccountService;
 import com.domain.account.service.UserTokenService;
 import com.scm.api.auth.model.PrincipalDetails;
@@ -60,17 +55,10 @@ public class OAuthLoginSuccessHandler implements AuthenticationSuccessHandler {
         //todo : 로그인 성공 후 JWT 발급 후 성공 화면으로 redirect할 부분.
         String accessToken = jwtAuthorizationProvider.generateToken(String.valueOf(principalDetails.getId()), principalDetails.getProvider());
 
-//        UserToken userToken = userTokenService.findByOauthAccessToken(principalDetails.getProviderAccessToken());
-        UserToken userToken = userTokenService.findUsersToken(principalDetails.getAccount().getAccountId());
-        if(userToken == null) {
-            SaveUserTokenInput saveUserTokenInput = SaveUserTokenInput.builder()
-                    .accountId(new AccountId(principalDetails.getId(), principalDetails.getProvider()))
-                    .oAuthAccessToken(principalDetails.getProviderAccessToken())
-                    .scmAccessToken(accessToken)
-                    .build();
-
-            userTokenService.save(saveUserTokenInput);
-        }
+        TokenCreateOrUpdateInput tokenCreateOrUpdateInput = new TokenCreateOrUpdateInput(
+                principalDetails.getId(), principalDetails.getProvider(), principalDetails.getProviderAccessToken(), accessToken
+        );
+        userTokenService.createOrUpdateToken(tokenCreateOrUpdateInput);
 
         String redirectUrl = UriComponentsBuilder.fromUriString(redirectURL)
                 .queryParam("scm-token", accessToken)
