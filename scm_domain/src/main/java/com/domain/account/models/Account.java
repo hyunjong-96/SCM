@@ -24,6 +24,8 @@ public class Account {
     private String password;
     @Column(name = "name")
     private String name;
+    @Column(name = "owner")
+    private String owner;
 
     @Builder
     public Account(
@@ -32,7 +34,8 @@ public class Account {
             AccountId accountId,
             String email,
             String password,
-            String name
+            String name,
+            String owner
     ) {
 //        this.id = id;
 //        this.provider = ObjectUtils.isEmpty(provider) ? LoginProvider.BASIC : provider;
@@ -40,6 +43,7 @@ public class Account {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.owner = owner;
     }
 
     public String getAccountPassword() {

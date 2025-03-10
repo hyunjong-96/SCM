@@ -75,6 +75,7 @@ public class CustomOAuth2UserService implements OAuth2UserService {
                     .email(oAuth2User.getAttribute("email"))
                     .name(oAuth2User.getAttribute("name"))
                     .provider(LoginProvider.valuesMap.get(registrationId))
+                    .owner(oAuth2User.getAttribute("login"))
                     .build();
 
             Account newAccount = accountService.save(saveAccountInput);

@@ -38,6 +38,7 @@ public class AccountService{
                 .email(input.getEmail())
                 .password(input.getPassword())
                 .name(input.getName())
+                .owner(input.getOwner())
                 .build();
 
         accountRepository.save(newAccount);
