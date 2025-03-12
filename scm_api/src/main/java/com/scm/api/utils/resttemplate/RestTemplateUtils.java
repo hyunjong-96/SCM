@@ -2,6 +2,7 @@ package com.scm.api.utils.resttemplate;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +44,6 @@ public class RestTemplateUtils {
         for(String key : params.keySet()) {
             httpHeaders.add(key, params.get(key));
         }
-
     }
 
     public UriComponentsBuilder buildUri(String uri, Map<String, Object> params) {
@@ -55,15 +57,63 @@ public class RestTemplateUtils {
         return builder;
     }
 
-    public <T> ResponseEntity<List<T>> requestGetMethod(HttpHeaders httpHeaders, UriComponentsBuilder uri, Class<T> requestType) {
+    public <T> ResponseEntity<List<T>> requestMultiGetMethod(HttpHeaders httpHeaders, UriComponentsBuilder uri, Class<T> requestType) {
+        HttpEntity<Void> entity = new HttpEntity<>(httpHeaders);
+
+        ParameterizedTypeReference typeReference = buildListResponseType(requestType, true);
+
         ResponseEntity<List<T>> responseEntity = restTemplate.exchange(
                 uri.toUriString(),
                 HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<T>>() {}
+                entity,
+                typeReference
         );
 
         return responseEntity;
+    }
+
+    public <T> ResponseEntity<T> requestSingleGetMethod(HttpHeaders httpHeaders, UriComponentsBuilder uri, Class<T> requestType) {
+        HttpEntity<Void> entity = new HttpEntity<>(httpHeaders);
+
+        ParameterizedTypeReference typeReference = buildListResponseType(requestType, false);
+
+        ResponseEntity<T> responseEntity = restTemplate.exchange(
+                uri.toUriString(),
+                HttpMethod.GET,
+                entity,
+                typeReference
+        );
+
+        return responseEntity;
+    }
+
+    private <T> ParameterizedTypeReference<?> buildListResponseType(Class<T> requestType, boolean isList) {
+        return new ParameterizedTypeReference<>() {
+            @Override
+            public Type getType() {
+                return getResponseType(requestType,isList);
+            }
+        };
+    }
+
+    private <T> ParameterizedType getResponseType(Class<T> requestType, boolean isList) {
+        return new ParameterizedType() {
+            @Override
+            public Type[] getActualTypeArguments() {
+                return new Type[]{requestType};
+            }
+
+            @Override
+            public Type getRawType() {
+                return isList ? List.class : requestType;
+            }
+
+            @Override
+            public Type getOwnerType() {
+                return null;
+            }
+        };
+
     }
 
 }

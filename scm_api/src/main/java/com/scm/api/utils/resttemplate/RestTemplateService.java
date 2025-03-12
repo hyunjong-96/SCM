@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class RestTemplateService {
 
         if(httpMethod.equals(HttpMethod.GET) ) {
 
-            return restTemplateUtils.requestGetMethod(httpHeaders, uri, responseType);
+            return restTemplateUtils.requestMultiGetMethod(httpHeaders, uri, responseType);
         }
         else {
             throw new GlobalException("Invalid HttpMethod");

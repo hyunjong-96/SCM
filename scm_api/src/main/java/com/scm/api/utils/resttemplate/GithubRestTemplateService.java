@@ -57,6 +57,8 @@ public class GithubRestTemplateService extends RestTemplateService{
         String accessToken = "Bearer "+getGithubAccessToken();
 
         httpHeaders.add("Authorization", accessToken);
+        httpHeaders.add("Accept", "application/vnd.github+json");
+        httpHeaders.add("Content-Type", "application/json;charset=utf-8");
 
         return httpHeaders;
     }
