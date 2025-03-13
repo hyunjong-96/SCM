@@ -1,5 +1,6 @@
 package com.scm.api.mergeRequest.dto;
 
+import com.scm.api.commit.dto.GithubCommitSimpleVO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -20,13 +21,13 @@ import lombok.ToString;
 @AllArgsConstructor
 public class GithubBranchVO {
     private String name;
-    private GithubCommitVO commit;
+    private GithubCommitSimpleVO commit;
     private boolean isProtected;
 
-    @Getter
-    @AllArgsConstructor
-    public class GithubCommitVO {
-        private String sha;
-        private String url;
-    }
+//    @Getter
+//    @AllArgsConstructor
+//    public class GithubCommitVO {
+//        private String sha;
+//        private String url;
+//    }
 }

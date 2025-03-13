@@ -7,12 +7,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * packageName    : com.scm.api.utils.resttemplate
@@ -32,15 +30,14 @@ public class GithubRestTemplateService extends RestTemplateService{
         super(restTemplateUtils);
     }
 
-    public <T> ResponseEntity<List<T>> requestGetList(String uri, Class<T> responseType) throws GlobalException {
+    public <T> ResponseEntity<List<T>> requestGithubGetList(String uri, HashMap<String, Object> params, Class<T> responseType) throws GlobalException {
         HttpHeaders httpHeaders = getHttpHeaders();
-        UriComponentsBuilder uriBuilder = this.buildGithubUri(uri);
+        UriComponentsBuilder uriBuilder = this.buildGithubUri(uri,params);
 
         return super.requestGetList(httpHeaders, HttpMethod.GET, uriBuilder, responseType);
     }
 
-    private UriComponentsBuilder buildGithubUri(String uri) {
-        Map<String, Object> params = new HashMap<>();
+    private UriComponentsBuilder buildGithubUri(String uri, HashMap<String, Object> params) {
 
         StringBuilder sb = new StringBuilder();
         sb.append(defaultUri);

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -30,7 +31,10 @@ public class MergeRequestService {
     public void test() throws GlobalException {
         StringBuilder sb = new StringBuilder();
         sb.append("/repos/hyunjong-96/SCM/branches");
-        ResponseEntity<List<GithubBranchVO>> result = githubRestTemplateService.requestGetList(sb.toString(), GithubBranchVO.class);
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        ResponseEntity<List<GithubBranchVO>> result = githubRestTemplateService.requestGithubGetList(sb.toString(), params, GithubBranchVO.class);
 
         log.info(result.toString());
     }

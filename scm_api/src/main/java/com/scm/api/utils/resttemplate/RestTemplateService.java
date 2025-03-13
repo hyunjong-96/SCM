@@ -26,7 +26,7 @@ public class RestTemplateService {
 
     public final RestTemplateUtils restTemplateUtils;
 
-    public <T> ResponseEntity<List<T>> requestGetList(HttpHeaders httpHeaders, HttpMethod httpMethod, UriComponentsBuilder uri, Class<T> responseType) throws GlobalException {
+    protected  <T> ResponseEntity<List<T>> requestGetList(HttpHeaders httpHeaders, HttpMethod httpMethod, UriComponentsBuilder uri, Class<T> responseType) throws GlobalException {
 
         if(httpMethod.equals(HttpMethod.GET) ) {
 

@@ -4,11 +4,11 @@ import com.scm.api.exception.GlobalException;
 import com.scm.api.repository.dto.GithubRepoVO;
 import com.scm.api.utils.resttemplate.GithubRestTemplateService;
 import com.scm.api.utils.resttemplate.RestTemplateUtils;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -31,7 +31,10 @@ public class RepositoryRestTemplateService extends GithubRestTemplateService {
 
     public List<GithubRepoVO> getUsersRepositories(String username) throws GlobalException {
         final String uri = "/users/"+username+"/repos";
-        ResponseEntity<List<GithubRepoVO>> result = super.requestGetList(uri, GithubRepoVO.class);
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        ResponseEntity<List<GithubRepoVO>> result = super.requestGithubGetList(uri, params, GithubRepoVO.class);
 
         return result.getBody();
     }
