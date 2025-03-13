@@ -1,6 +1,8 @@
 package com.scm.api.commit.service;
 
 import com.scm.api.commit.dto.CommitDetailOutput;
+import com.scm.api.commit.dto.GithubCommitVO;
+import com.scm.api.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,11 @@ import java.util.List;
 @Service
 public class CommitFacadeService {
 
-    public List<CommitDetailOutput> getCommitList(String owner, String repo, String branch) {
+    private CommitRestTemplateService commitRestTemplateService;
 
+    public List<CommitDetailOutput> getCommitList(String owner, String repo, String branch) throws GlobalException {
+        List<GithubCommitVO> output = commitRestTemplateService.getCommitList(owner, repo, branch);
+
+        return output.stream().map(CommitDetailOutput::new).toList();
     }
 }

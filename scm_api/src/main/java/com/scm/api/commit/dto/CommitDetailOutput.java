@@ -1,5 +1,6 @@
 package com.scm.api.commit.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,13 +28,12 @@ public class CommitDetailOutput {
     private String commentsUrl;
     private List<GithubCommitSimpleVO> parents;
 
-    @Builder
-    public CommitDetailOutput(String sha, String nodeId, GithubCommitInfoVO commit, String url, String commentsUrl, List<GithubCommitSimpleVO> parents) {
-        this.sha = sha;
-        this.nodeId = nodeId;
-        this.commit = commit;
-        this.url = url;
-        this.commentsUrl = commentsUrl;
-        this.parents = parents;
+    public CommitDetailOutput(GithubCommitVO vo) {
+        this.sha = vo.getSha();
+        this.nodeId = vo.getNodeId();
+        this.commit = vo.getCommit();
+        this.url = vo.getUrl();
+        this.commentsUrl = vo.getCommentsUrl();
+        this.parents = vo.getParents();
     }
 }

@@ -2,6 +2,7 @@ package com.scm.api.commit;
 
 import com.scm.api.commit.dto.CommitDetailOutput;
 import com.scm.api.commit.service.CommitFacadeService;
+import com.scm.api.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class CommitController {
 
     @GetMapping("/{owner}/{repo}/commit")
     public ResponseEntity<List<CommitDetailOutput>> getCommitList(
-            @PathVariable("owner") String owner, @PathVariable("repo")String repo, @RequestParam(required = false, value = "branch") String branch) {
+            @PathVariable("owner") String owner, @PathVariable("repo")String repo, @RequestParam(required = false, value = "branch") String branch) throws GlobalException {
 
         List<CommitDetailOutput> output = commitFacadeService.getCommitList(owner, repo, branch);
 
