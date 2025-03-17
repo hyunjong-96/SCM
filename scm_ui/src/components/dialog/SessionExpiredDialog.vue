@@ -21,22 +21,6 @@ onMounted(() => {
 
 </script>
 
-<!-- <template>
-    <div style="position: fixed; z-index:999; top:100px; left:50%; transform: translate(-50%, -50%);">
-    <div
-    :model-value="isVisible"
-      class="d-flex justify-center"
-      :close-on-content-click=false
-      @update:model-value="value => { if (!value) hideAlert() }"
-    >
-        <div class="dialog-container">
-            <div>{{ titleMessage }}</div>
-            <div>{{ message }}</div>
-        </div>
-    </div>
-</div>
-</template> -->
-
 <style scoped>
 .dialog-container{
     background-color: red;

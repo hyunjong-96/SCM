@@ -1,0 +1,67 @@
+<template>
+    <VContainer>
+        <VRow class="header-container">
+            <VCol cols="6">
+                <h1>User Repository</h1>
+            </VCol>
+            <VCol cols="3" class="select-container">
+                <VSelect
+                label="User"
+                :items="['hyunjong-96', 'tester1']"
+                @update:modelValue="userClick"
+                density="compact"
+            ></VSelect>
+            </VCol>
+        </VRow>
+        <VRow class="body-container">
+            <VCol>
+                <VCard v-if="userRepositoryList.length == 0">
+                    <VCardText>No Repository Found</VCardText>
+                </VCard>
+
+                <VRow v-else class="repository-list">
+                    <div
+                        v-for="repo in userRepositoryList"
+                        :key="repo.id"
+                    >
+                        <RepositoryComponentVue :repository="repo"/>
+                    </div>
+                </VRow>
+            </VCol>
+        </VRow>
+    </VContainer>
+</template>
+
+<script setup>
+import {ref} from 'vue'
+import RepositoryComponentVue from './RepositoryComponent.vue'
+
+const userRepositoryList = ref([])
+
+const userClick = (username) => {
+    console.log('userClick : ',username)
+    userRepositoryList.value = [{id:1, name:'test_repository'}, {id: 2, name:'hyunjong-96-repository'}];
+}
+
+</script>
+
+<style scoped>
+    .header-container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* 수직 정렬 */
+    }
+    .select-container{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center; /* 수직 정렬 */
+    }
+    .repository-list{
+        display:flex;
+        flex-direction:column;
+        gap:30px
+    }
+    .v-select{
+        max-height: 30px;
+    }
+</style>

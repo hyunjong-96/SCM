@@ -1,6 +1,7 @@
 <template>
-    <h1>User Repository</h1>
+    <UserRepositoryComponent/>
 </template>
 
 <script setup>
+import UserRepositoryComponent from "@/components/repository/UserRepositoryComponent.vue";
 </script>

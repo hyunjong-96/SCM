@@ -35,7 +35,8 @@ const routes = [
   },
   {
     path: '/repository',
-    compoent: UserRepositoryView 
+    name: 'UserRepository',
+    component: UserRepositoryView 
   }
 ]
 
