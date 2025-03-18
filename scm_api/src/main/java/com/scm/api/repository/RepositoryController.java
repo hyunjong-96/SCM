@@ -1,8 +1,8 @@
 package com.scm.api.repository;
 
 import com.scm.api.exception.GlobalException;
-import com.scm.api.repository.dto.GithubRepoVO;
-import com.scm.api.repository.service.RepositoryService;
+import com.scm.api.repository.dto.UserRepoOutput;
+import com.scm.api.repository.service.RepositoryFacadeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,11 +31,11 @@ import java.util.List;
 @RestController
 public class RepositoryController {
 
-    private final RepositoryService repositoryService;
+    private final RepositoryFacadeService repositoryFacadeService;
 
     @GetMapping("/users/{username}")
-    public ResponseEntity<List<GithubRepoVO>> getUserRepos(@PathVariable("username") String username) throws GlobalException {
-        List<GithubRepoVO> output = repositoryService.getUserRepos(username);
+    public ResponseEntity<List<UserRepoOutput>> getUserRepos(@PathVariable("username") String username) throws GlobalException {
+        List<UserRepoOutput> output = repositoryFacadeService.getUserRepos(username);
 
         return new ResponseEntity<>(output, HttpStatus.OK);
     }

@@ -2,6 +2,8 @@ package com.scm.api.repository.service;
 
 import com.scm.api.exception.GlobalException;
 import com.scm.api.repository.dto.GithubRepoVO;
+import com.scm.api.repository.dto.RepoMapper;
+import com.scm.api.repository.dto.UserRepoOutput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +22,15 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Service
-public class RepositoryService {
+public class RepositoryFacadeService {
+
+    private final RepoMapper mapper;
 
     private final RepositoryRestTemplateService repositoryRestTemplateService;
 
-    public List<GithubRepoVO> getUserRepos(String username) throws GlobalException {
-        return repositoryRestTemplateService.getUsersRepositories(username);
+    public List<UserRepoOutput> getUserRepos(String username) throws GlobalException {
+        List<GithubRepoVO> repoVOList = repositoryRestTemplateService.getUsersRepositories(username);
+
+        return mapper.repoVoToRepoOutput(repoVOList);
     }
 }

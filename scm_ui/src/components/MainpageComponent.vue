@@ -24,7 +24,7 @@
 //     }
 // }
 
-import api from '../modules/api'
+// import api from '../modules/api'
 import {useCookies} from 'vue3-cookies'
 
 const {cookies} = useCookies();
@@ -34,7 +34,7 @@ const accessToken = cookies.get('scm-token')
 console.log('accessToken : ',accessToken);
 
 const callTest = () => {
-    api.get('/merge-request')
+    // api.get('/merge-request')
 }
 
 </script>

@@ -1,29 +1,24 @@
 package com.scm.api.repository.dto;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Map;
+import lombok.Setter;
 
 /**
  * packageName    : com.scm.api.repository.dto
- * fileName       : GithubRepoVO
+ * fileName       : UserRepoOutput
  * author         : leehyunjong
- * date           : 2025/03/11
+ * date           : 2025/03/18
  * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 2025/03/11        leehyunjong       최초 생성
+ * 2025/03/18        leehyunjong       최초 생성
  */
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class GithubRepoVO {
+public class UserRepoOutput {
     private Long id;
     private String nodeId;
     private String name;
@@ -32,5 +27,5 @@ public class GithubRepoVO {
     private String htmlUrl;
     private String description;
     private String url;
-    private Map<String, Object> owner;
+    private String owner;
 }

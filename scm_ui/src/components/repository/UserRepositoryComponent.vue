@@ -34,13 +34,34 @@
 
 <script setup>
 import {ref} from 'vue'
+import api from '../../modules/api'
 import RepositoryComponentVue from './RepositoryComponent.vue'
 
 const userRepositoryList = ref([])
 
 const userClick = (username) => {
-    console.log('userClick : ',username)
-    userRepositoryList.value = [{id:1, name:'test_repository'}, {id: 2, name:'hyunjong-96-repository'}];
+    
+    // {
+    //     id;
+    //     nodeId;
+    //     name;
+    //     fullName;
+    //     isPrivate;
+    //     htmlUrl;
+    //     description;
+    //     url;
+    // }
+
+    // userRepositoryList.value = [{id:1, name:'test_repository'}, {id: 2, name:'hyunjong-96-repository'}];
+
+    callUserRepo(username);
+}
+
+const callUserRepo = async(username) => {
+    const result = await api.get(`/repos/users/${username}`);
+
+    console.log('callUserRepo : ', result.data);
+    userRepositoryList.value = result.data;
 }
 
 </script>
