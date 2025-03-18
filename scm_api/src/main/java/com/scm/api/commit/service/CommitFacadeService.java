@@ -23,7 +23,7 @@ import java.util.List;
 @Service
 public class CommitFacadeService {
 
-    private CommitRestTemplateService commitRestTemplateService;
+    private final CommitRestTemplateService commitRestTemplateService;
 
     public List<CommitDetailOutput> getCommitList(String owner, String repo, String branch) throws GlobalException {
         List<GithubCommitVO> output = commitRestTemplateService.getCommitList(owner, repo, branch);

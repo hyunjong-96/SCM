@@ -2,7 +2,6 @@ package com.scm.api.commit.service;
 
 import com.scm.api.commit.dto.GithubCommitVO;
 import com.scm.api.exception.GlobalException;
-import com.scm.api.mergeRequest.dto.GithubBranchVO;
 import com.scm.api.utils.resttemplate.GithubRestTemplateService;
 import com.scm.api.utils.resttemplate.RestTemplateUtils;
 import io.micrometer.common.util.StringUtils;

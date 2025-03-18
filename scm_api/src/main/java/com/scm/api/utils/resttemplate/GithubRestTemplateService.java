@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import java.util.List;
  * -----------------------------------------------------------
  * 2025/03/09        leehyunjong       최초 생성
  */
+@Component
 public class GithubRestTemplateService extends RestTemplateService{
     private final String defaultUri = "https://api.github.com";
 
