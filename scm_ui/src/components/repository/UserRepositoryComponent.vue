@@ -60,8 +60,9 @@ const userClick = (username) => {
 const callUserRepo = async(username) => {
     const result = await api.get(`/repos/users/${username}`);
 
-    console.log('callUserRepo : ', result.data);
-    userRepositoryList.value = result.data;
+    if(result) {
+        userRepositoryList.value = result.data;   
+    }
 }
 
 </script>
