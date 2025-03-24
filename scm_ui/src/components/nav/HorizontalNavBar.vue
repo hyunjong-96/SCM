@@ -36,7 +36,7 @@
   
   const items = ref([
     { title: 'Home', path: '/'},
-    { title: 'Repository', path: '/repository'},
+    { title: 'Repository', path: '/repo'},
     { title: 'Settings' }
   ])
 

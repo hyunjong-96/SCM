@@ -4,16 +4,19 @@
             <VCol>
                 <h1>Repository Commit</h1>
             </VCol>
-            <VCol>
+            <VCol class="commit-selecter">
                 <VSelect
                 label="User"
                 :items="userList"
                 @update:modelValue="userClick"
+                return-object
                 ></VSelect>
                 <VSelect
                 label="Repository"
                 :items="userRepositoryList"
                 @update:modelValue="repoClick"
+                item-title="name"
+                return-object
                 ></VSelect>
                 <VSelect
                 label="Branch"
@@ -23,22 +26,17 @@
             </VCol>
         </VRow>
         <VRow>
-            <VBtn>Commit</VBtn>
+            <VCol class="commit-button">
+                <VBtn>Commit</VBtn>
+            </VCol>
         </VRow>
         <VRow>
             <VCol>
                 <VCard v-if="commitList.length == 0">
-                    <VCardText>No Commit FOund</VCardText>
+                    <VCardText>No Commit Found</VCardText>
                 </VCard>
 
-                <VRow v-else>
-                    <!-- <div
-                        v-for="commit in commitList"
-                        ::key="commit.id"
-                    >
-                        commit.name
-                    </div> -->
-                </VRow>
+                
             </VCol>
         </VRow>
     </VContainer>
@@ -58,6 +56,7 @@ const searchRepoName = ref('')
 const searchBranchName = ref('')
 
 const userClick = async(username) => {
+    console.log('userClick : ',username)
     searchUserName.value = username
 
     callUserRepo(username);
@@ -66,12 +65,15 @@ const userClick = async(username) => {
 const callUserRepo = async(username) => {
     const result = await api.get(`/repos/users/${username}`);
 
+    console.log('callUserRepo : ',result)
+
     if(result) {
         userRepositoryList.value = result.data;   
     }
 }
 
 const repoClick = async(repo) => {
+    console.log('repoClick : ',repo)
     searchRepoName.value = repo.name
 
     await callRepoBranch(repo.name);
@@ -79,9 +81,13 @@ const repoClick = async(repo) => {
 
 const callRepoBranch = async(repo) => {
     console.log('callRepoBranch repo : ',repo)
-    // const result = await api.get(`/repos/${searchUserName}/${searchRepoName}/branches`);
+    console.log('searchUserName : ',searchUserName.value)
 
-    repoBranchList.value = [];
+    const result = await api.get(`/repos/${searchUserName.value}/${repo}/branches`);
+
+    if(result) {
+        repoBranchList.value = result.data;
+    }
 
 }
 
@@ -94,7 +100,28 @@ const branchClick = async(branch) => {
 const callRepoCommit = async(branch) => {
     console.log('callRepoCommit : ',branch)
 
-    commitList.value = [];
+    const data = {
+        params : {
+            "branch" : branch
+        }
+    }
+
+    const result = await api.get(`/commit/${searchUserName.value}/${searchRepoName.value}/commit`, data)
+
+    if(result) {
+        commitList.value = result.data;
+    }
 }
 
 </script>
+
+<style scoped>
+.commit-selecter{
+    display: flex;
+    flex-direction: row;
+}
+.commit-button{
+    display: flex;
+    justify-content: end;
+}
+</style>
