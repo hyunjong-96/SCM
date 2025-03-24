@@ -2,6 +2,7 @@ package com.scm.api.repository;
 
 import com.scm.api.exception.GlobalException;
 import com.scm.api.repository.dto.UserRepoOutput;
+import com.scm.api.repository.dto.branch.RepoBranchOutput;
 import com.scm.api.repository.service.RepositoryFacadeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,15 @@ public class RepositoryController {
     @GetMapping("/users/{username}")
     public ResponseEntity<List<UserRepoOutput>> getUserRepos(@PathVariable("username") String username) throws GlobalException {
         List<UserRepoOutput> output = repositoryFacadeService.getUserRepos(username);
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{username}/repo/{repo}/branches")
+    public ResponseEntity<List<RepoBranchOutput>> getUserRepoBranch(
+            @PathVariable(value = "username")String username, @PathVariable(value = "repo")String repo
+    ) throws GlobalException {
+        List<RepoBranchOutput> output = repositoryFacadeService.getUserRepoBranch(username, repo);
 
         return new ResponseEntity<>(output, HttpStatus.OK);
     }

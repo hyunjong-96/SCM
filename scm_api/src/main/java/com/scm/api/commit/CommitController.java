@@ -30,7 +30,7 @@ public class CommitController {
 
     private final CommitFacadeService commitFacadeService;
 
-    @GetMapping("/{owner}/{repo}/commit")
+    @GetMapping("/username/{owner}/repo/{repo}/commit")
     public ResponseEntity<List<CommitDetailOutput>> getCommitList(
             @PathVariable("owner") String owner, @PathVariable("repo")String repo, @RequestParam(required = false, value = "branch") String branch) throws GlobalException {
 

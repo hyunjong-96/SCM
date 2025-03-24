@@ -1,5 +1,7 @@
 package com.scm.api.repository.dto;
 
+import com.scm.api.repository.dto.branch.GithubRepoBranchVO;
+import com.scm.api.repository.dto.branch.RepoBranchOutput;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @Mapper(componentModel = "spring")
 public interface RepoMapper {
+    /* Repository */
     @Mapping(target = "owner", source="owner", qualifiedByName = "mapOwnerToString")
     UserRepoOutput repoVoToRepoOutput(GithubRepoVO vo);
 
@@ -33,4 +36,7 @@ public interface RepoMapper {
 
         return owner.get("login").toString();
     }
+
+    /* Branch */
+    List<RepoBranchOutput> branchVoToBranchOutput(List<GithubRepoBranchVO> vo);
 }

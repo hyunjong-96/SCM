@@ -22,6 +22,8 @@
                 label="Branch"
                 :items="repoBranchList"
                 @update:modelValue="branchClick"
+                item-title="name"
+                return-object
                 ></VSelect>
             </VCol>
         </VRow>
@@ -83,7 +85,9 @@ const callRepoBranch = async(repo) => {
     console.log('callRepoBranch repo : ',repo)
     console.log('searchUserName : ',searchUserName.value)
 
-    const result = await api.get(`/repos/${searchUserName.value}/${repo}/branches`);
+    const result = await api.get(`/repos/users/${searchUserName.value}/repo/${repo}/branches`);
+
+    console.log('callRepoBranch result : ',result)
 
     if(result) {
         repoBranchList.value = result.data;
@@ -106,8 +110,9 @@ const callRepoCommit = async(branch) => {
         }
     }
 
-    const result = await api.get(`/commit/${searchUserName.value}/${searchRepoName.value}/commit`, data)
+    const result = await api.get(`/commit/username/${searchUserName.value}/repo/${searchRepoName.value}/commit`, data)
 
+    console.log('callRepoCommit : ',result)
     if(result) {
         commitList.value = result.data;
     }

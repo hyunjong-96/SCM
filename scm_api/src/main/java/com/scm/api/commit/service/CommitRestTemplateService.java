@@ -29,7 +29,7 @@ public class CommitRestTemplateService extends GithubRestTemplateService {
 
     public List<GithubCommitVO> getCommitList(String owner, String repo, String branch) throws GlobalException {
         StringBuilder sb = new StringBuilder();
-        sb.append("/repos/").append(owner).append("/").append("repo").append("commit");
+        sb.append("/repos/").append(owner).append("/").append(repo).append("/").append("commits");
 
         HashMap<String, Object> params = new HashMap<>();
 
