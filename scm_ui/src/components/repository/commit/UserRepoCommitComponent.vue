@@ -38,7 +38,14 @@
                     <VCardText>No Commit Found</VCardText>
                 </VCard>
 
-                
+                <VRow v-else class="commit-items">
+                    <div
+                        v-for="(commit, index) in commitList"
+                        :key="commit.nodeId"
+                    >
+                        <RepoCommitComponent :commit="commit" :index="index+1"/>
+                    </div>
+                </VRow>
             </VCol>
         </VRow>
     </VContainer>
@@ -47,6 +54,7 @@
 <script setup>
 import {ref } from 'vue'
 import api from '../../../modules/api'
+import RepoCommitComponent from '../../../components/repository/commit/RepoCommitComponent.vue'
 
 const userList = ref(['hyunjong-96', 'tester1']);
 const userRepositoryList = ref([]);
@@ -128,5 +136,10 @@ const callRepoCommit = async(branch) => {
 .commit-button{
     display: flex;
     justify-content: end;
+}
+.commit-items{
+    display:flex;
+    flex-direction:column;
+    gap:10px
 }
 </style>

@@ -30,14 +30,8 @@ defineProps({
     border: 1px solid #ddd;
     border-radius: 8px;
 }
-.repository-link {
-    text-decoration: none;
-    color: black; /* 기본 색상 검은색 */
-    transition: color 0.3s ease-in-out;
-}
-
 .repository-link:hover {
-    color: var(--v-theme-primary); /* Vuetify primary 색상 */
     text-decoration: underline;
+    color: #26282a;
 }
 </style>
