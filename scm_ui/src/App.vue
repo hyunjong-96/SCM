@@ -18,10 +18,18 @@ const hideNavBar = computed(() => route.path === '/login')
     <template v-if="!hideNavBar">
       <HorizontalNavBar/>
     </template>
-    <v-main>
+    <v-main class="main-content">
       <router-view/>
       <SessionExpiredDialog/>
       <ErrorDialog/>
     </v-main>
   </v-app>
 </template>
+
+<!-- <style scoped>
+.main-content {
+  padding-top: 64px; /* 네비게이션 바의 높이만큼 */
+  min-height: 100vh; /* 화면 전체 높이 유지 */
+  background-color: #f8f9fa; /* 배경색 추가 (필요 시) */
+}
+</style> -->
