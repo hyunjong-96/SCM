@@ -90,7 +90,8 @@ instance.interceptors.response.use(
             alertStore.showAlert(title, message);
         }
 
-        return
+        // eslint-disable-next-line
+        return Promis.reject(error);
     }
 )
 
