@@ -5,6 +5,7 @@ import com.domain.account.models.*;
 import com.domain.account.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -20,34 +21,65 @@ public class AccountService{
         this.userRoleService = userRoleService;
     }
 
-    public void save(SaveAccountInput input) {
+    public Account save(SaveAccountInput input) {
+
+        Long id = input.getId();
+        if(ObjectUtils.isEmpty(input.getProvider()) || input.getProvider().equals(LoginProvider.BASIC)) {
+            id = this.getBasicProviderMaxId();
+        }
+
+        AccountId newAccountId = AccountId.builder()
+                .id(id)
+                .provider(input.getProvider())
+                .build();
+
         Account newAccount = Account.builder()
-                .id(input.getId())
+                .accountId(newAccountId)
                 .email(input.getEmail())
                 .password(input.getPassword())
                 .name(input.getName())
-                .provider(input.getProvider())
+                .owner(input.getOwner())
                 .build();
 
         accountRepository.save(newAccount);
 
         //UserRole 저장
-        userRoleService.save(newAccount.getId(), ScmRole.ROLE_USER);
+        if(userRoleService.findByUserId(newAccountId).isEmpty()) {
+            userRoleService.save(newAccount.getAccountId(), ScmRole.ROLE_USER);
+        }
+
+        return newAccount;
     }
 
-    public boolean isExistAccount(String email) {
-        return accountRepository.findByEmail(email) != null;
+    public boolean isExistAccount(Long id, String provider) {
+        LoginProvider loginProvider = LoginProvider.valuesMap.get(provider);
+
+        if(provider == null) {
+            return false;
+        }
+        AccountId accountId = new AccountId(id, loginProvider);
+
+        return accountRepository.findById(accountId).isPresent();
     }
 
     public Account findByEmail(String email) {
         return accountRepository.findByEmail(email);
     }
 
-    public List<UserRole> findRoleByUserId(Long userId) {
-        return userRoleService.findByUserId(userId);
+    public List<UserRole> findRoleByUserId(AccountId accountId) {
+        return userRoleService.findByUserId(accountId);
     }
 
-    public Account findByIdAndProvider(Long id, LoginProvider provider) {
-        return accountRepository.findByIdAndProvider(id, provider);
+    public Account findByPk(AccountId accountId) {
+//        return accountRepository.findByIdAndProvider(id, provider);
+        return accountRepository.findById(accountId).orElse(null);
+    }
+
+    public Long getProviderMaxId(LoginProvider provider) {
+        return accountRepository.findAccountId_IdByAccountId_Provider(provider);
+    }
+
+    public Long getBasicProviderMaxId() {
+        return getProviderMaxId(LoginProvider.BASIC);
     }
 }

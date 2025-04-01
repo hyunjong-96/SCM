@@ -9,6 +9,7 @@ export const useAlertStore = defineStore('alert', () => {
     const titleMessage = ref('');
 
     const showAlert = (title, msg, flag) => {
+        console.log('alert showAlert title :',title, ' msg : ',msg, ' flag : ',flag)
         if (!flag) {
             isVisibleNormalError.value = true;
         } else {
@@ -16,6 +17,9 @@ export const useAlertStore = defineStore('alert', () => {
         }
         titleMessage.value = title;
         message.value = msg;
+
+        console.log('isVisibleNormalError:', isVisibleNormalError.value);
+        console.log('isVisibleSessionExpired:', isVisibleSessionExpired.value);
     }
 
     const hideAlert = () => {

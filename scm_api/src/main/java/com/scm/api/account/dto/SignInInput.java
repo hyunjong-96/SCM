@@ -25,4 +25,5 @@ public class SignInInput {
     private String email;
     private String password;
     private String name;
+    private LoginProvider loginProvider;
 }

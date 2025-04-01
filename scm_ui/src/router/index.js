@@ -3,6 +3,8 @@ import MainView from '../views/MainView.vue'
 import MainpageView from '../views/MainpageView.vue'
 import RedirectComponent from '../components/auth/RedirectComponent.vue'
 import LoginView from '../views/login/LoginView.vue'
+import UserRepositoryView from '../views/repository/UserRepositoryView.vue'
+import UserRepoCommitView from '../views/repository/commit/UserRepoCommitView.vue'
 
 const routes = [
   {
@@ -31,6 +33,16 @@ const routes = [
   {
     path: '/auth/redirect',
     component: RedirectComponent
+  },
+  {
+    path: '/repo',
+    name: 'UserRepository',
+    component: UserRepositoryView 
+  },
+  {
+    path: '/repo/commit',
+    name: 'UserRepoCommitView',
+    component: UserRepoCommitView
   }
 ]
 

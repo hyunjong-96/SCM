@@ -1,6 +1,7 @@
 package com.scm.api.account.service;
 
 import com.domain.account.dto.SaveAccountInput;
+import com.domain.account.models.LoginProvider;
 import com.domain.account.service.AccountService;
 import com.scm.api.account.dto.SignInInput;
 import com.scm.api.exception.GlobalException;
@@ -30,9 +31,10 @@ public class AccountFacadeService {
 
     public void signIn(SignInInput input) throws GlobalException {
 
-        if(accountService.isExistAccount(input.getEmail())) {
+        if(accountService.findByEmail(input.getEmail()) == null) {
             throw new GlobalException(input.getEmail() + "is exist");
         }
+
 
         SaveAccountInput accountInput = SaveAccountInput.builder()
                 .email(input.getEmail())

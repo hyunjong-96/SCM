@@ -1,5 +1,7 @@
 package com.scm.api.auth.model;
 
+import com.domain.account.models.Account;
+import com.domain.account.models.LoginProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -13,21 +15,27 @@ public class PrincipalDetails implements Authentication, OAuth2User {
     private OAuth2Attribute attribute;
 
     private Long id;
+    private LoginProvider provider;
     private String email;
     private String name;
+    private String providerAccessToken;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public PrincipalDetails(AccountDetails account) {
+    public PrincipalDetails(AccountDetails account, String providerAccessToken) {
         this.account = account;
 
-        this.id = account.getId();
+        this.id = account.getAccountId().getId();
+        this.provider = account.getAccountId().getProvider();
         this.email = account.getEmail();
         this.name = account.getName();
         this.authorities = account.getAuthorities();
+
+        this.providerAccessToken = providerAccessToken;
     }
 
-    public PrincipalDetails(OAuth2Attribute attributes) {
+    public PrincipalDetails(AccountDetails account, OAuth2Attribute attributes, String provider, String providerAccessToken) {
+        this.account = account;
         this.attribute = attributes;
 
         this.id = attributes.getId();
@@ -35,6 +43,8 @@ public class PrincipalDetails implements Authentication, OAuth2User {
                 String.valueOf(attributes.getAttributes().get(attributes.getAttributeKey())) : attributes.getEmail();
         this.name = attributes.getName();
         this.authorities = attributes.getAuthorities();
+        this.provider = LoginProvider.valuesMap.get(provider);
+        this.providerAccessToken = providerAccessToken;
     }
 
     @Override
@@ -88,4 +98,10 @@ public class PrincipalDetails implements Authentication, OAuth2User {
     public String getUserName() {
         return this.name;
     }
+
+    public LoginProvider getProvider() {return this.provider;}
+
+    public String getProviderAccessToken() {return this.providerAccessToken;}
+
+    public Account getAccount() {return this.account;}
 }

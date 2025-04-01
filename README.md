@@ -28,15 +28,65 @@ Github의 OpenAPI를 이용해서 나의 github를 관리하는 웹 서비스
 
 
 .SCM
+
 ├── README.md
+
 ├── front
+
 ├── scm_api
+
 │      ├── build.gradle
+
 │      └── src
+
 ├── scm_domain
+
 │      ├── build.gradle
+
 │      └── src
+
 ├── build.gradle
+
 └── settings.gradle
 
-90 directories, 42 files
+---
+## 기능
+
+### [1] 사용자 레포지토리
+
+- 레포지토리 조회
+  - https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#list-repositories-for-a-user
+  - 조건
+    - username
+
+### [2] commit
+
+- 커밋 리스트 조회
+  - https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28
+- 예약 커밋
+  - 계획
+    1. `org.eclipse.jgit.api.Git`을 이용해 커밋 푸시
+    2. `github open api`를 이용해 PR 생성
+    3. (1), (2) 작업을 스커줄러를 통해 실행.
+
+### [3] Pull Request
+
+- Pull Request 조회
+  - https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28
+- Pull Request 생성
+  - https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
+- Pull Request MR
+  - https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#merge-a-pull-request
+- 예약 Pull Request
+  - git action? or scheduler
+- 예약 Merge Pull Request
+  - git action? or scheduler
+
+### [4] 자동화 배포
+
+- git action 또는 젠킨슨
+
+- Pull Request 예약
+  - git action 또는 스케줄러
+- Commit 예약 
+  - 되는지 모르겠음

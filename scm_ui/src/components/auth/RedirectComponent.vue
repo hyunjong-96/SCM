@@ -7,7 +7,9 @@ const { cookies } = useCookies();
 
 console.log('redirect : ',router)
 
-const accessToken = router.currentRoute.value.query
+const query = router.currentRoute.value.query
+
+const accessToken = query["scm-token"]
 
 console.log('redirect : ',accessToken)
 

@@ -17,13 +17,15 @@ public class SaveAccountInput {
     private String password;
     private String name;
     private LoginProvider provider;
+    private String owner;
 
     @Builder
-    public SaveAccountInput(Long id, String email, String password, String name, LoginProvider provider) {
+    public SaveAccountInput(Long id, String email, String password, String name, LoginProvider provider, String owner) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.provider = provider;
+        this.owner = owner;
     }
 }

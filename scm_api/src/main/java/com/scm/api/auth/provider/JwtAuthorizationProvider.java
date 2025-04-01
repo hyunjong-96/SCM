@@ -1,5 +1,8 @@
 package com.scm.api.auth.provider;
 
+import com.domain.account.models.LoginProvider;
+import com.domain.account.models.UserToken;
+import com.domain.account.service.UserTokenService;
 import com.scm.api.auth.model.AccountDetails;
 import com.scm.api.auth.model.PrincipalDetails;
 import com.scm.api.auth.service.AccountDetailService;
@@ -8,6 +11,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -21,6 +25,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * packageName    : com.scm.api.auth.provider
@@ -34,15 +40,17 @@ import java.util.Date;
  * 2024/11/24        leehyunjong       최초 생성
  */
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class JwtAuthorizationProvider {
 
     private final long EXPIRED_TIME = 1000L*60*60;
     private final AccountDetailService accountDetailService;
+    private final UserTokenService userTokenService;
 
-    public JwtAuthorizationProvider(AccountDetailService accountDetailService) {
-        this.accountDetailService = accountDetailService;
-    }
+//    public JwtAuthorizationProvider(AccountDetailService accountDetailService) {
+//        this.accountDetailService = accountDetailService;
+//    }
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -61,7 +69,11 @@ public class JwtAuthorizationProvider {
 
         AccountDetails accountDetails = (AccountDetails) accountDetailService.loadUserByUsername(username);
 
-        return new PrincipalDetails(accountDetails);
+        UserToken userToken = userTokenService.findUsersToken(accountDetails.getAccountId());
+
+        String providerAccessToken = userToken != null ? userToken.getOauthAccessToken() : null;
+
+        return new PrincipalDetails(accountDetails, providerAccessToken);
 //        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword());
     }
 
@@ -78,9 +90,14 @@ public class JwtAuthorizationProvider {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String id, LoginProvider provider) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("provider",provider);
+        claims.put("id",id);
+
         return Jwts.builder()
-                .setSubject(username)
+//                .setSubject(username)
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + EXPIRED_TIME))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)

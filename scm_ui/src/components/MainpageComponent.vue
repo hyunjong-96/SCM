@@ -8,16 +8,33 @@
         <h1 >
                 Hello custom login
             </h1>
+
+            <VBtn @click="callTest">
+                button
+            </VBtn>
     </v-container>
 </template>
 
-<script>
+<script setup>
 
-export default {
-    name: 'MainpageComponent',
-    data: () => {
+// export default {
+//     name: 'MainpageComponent',
+//     data: () => {
 
-    }
+//     }
+// }
+
+// import api from '../modules/api'
+import {useCookies} from 'vue3-cookies'
+
+const {cookies} = useCookies();
+
+const accessToken = cookies.get('scm-token')
+
+console.log('accessToken : ',accessToken);
+
+const callTest = () => {
+    // api.get('/merge-request')
 }
 
 </script>

@@ -24,7 +24,7 @@ public class AccountDetailService implements UserDetailsService {
             throw new UsernameNotFoundException(username + " is not exist!");
         }
 
-        List<UserRole> userRoleList = accountService.findRoleByUserId(account.getId());
+        List<UserRole> userRoleList = accountService.findRoleByUserId(account.getAccountId());
 
         return new AccountDetails(account, userRoleList);
     }
